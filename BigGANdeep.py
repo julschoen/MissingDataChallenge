@@ -164,7 +164,7 @@ class Generator(nn.Module):
       # while the inner loop is over a given block
       self.blocks = []
       for index in range(len(self.arch['out_channels'])):
-        scale = 1.98 if index == 5 else 2
+        scale = 1.9 if index == 5 else 2
         self.blocks += [[GBlock(in_channels=self.arch['in_channels'][index],
                                out_channels=self.arch['in_channels'][index] if g_index==0 else self.arch['out_channels'][index],
                                which_conv=self.which_conv,
