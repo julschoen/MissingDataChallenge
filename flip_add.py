@@ -64,10 +64,9 @@ def train_in_painter(settings):
         im[and_mask] = im_[and_mask]
         mask[and_mask] = 0
         
-        """
         for i in range(1000):
-            #im_ = np.fliplr(im.copy())
-            #mask_ = np.fliplr(mask.copy())
+            im_ = np.fliplr(im.copy())
+            mask_ = np.fliplr(mask.copy())
 
             im_aug, mask_aug = augment(im_, mask_)
 
@@ -75,10 +74,12 @@ def train_in_painter(settings):
             im[and_mask] = im_aug[and_mask]
             mask[and_mask] = 0
 
+            break
+
             if (mask == 0).all():
                 print(i)
                 break
-        """
+
         
 
         io.imsave(os.path.join(inpainted_result_dir, f"{idx}_mask.png"), mask.astype(np.uint8)*255)
