@@ -67,8 +67,8 @@ class GBlock(nn.Module):
 def G_arch(ch=64, attention='64', ksize='333333', dilation='111111'):
   arch = {}
 
-  arch[360] = {'in_channels' :  [ch*item for item in [16, 8, 4, 2, 1, 1]],
-               'out_channels' : [item * ch for item in [8, 7, 4, 2, 1]],
+  arch[360] = {'in_channels' :  [ch*item for item in [16, 8, 8, 4, 2, 1, 1]],
+               'out_channels' : [item * ch for item in [8, 8, 4, 2, 1]],
                'upsample' : [True] * 6 + [False],
                'resolution' : [5 , 11, 22, 45, 90, 180, 360],
                 'attention' : {45:45}}
