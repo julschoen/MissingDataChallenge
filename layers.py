@@ -303,7 +303,7 @@ class ccbn(nn.Module):
       self.register_buffer('stored_var',  torch.ones(output_size)) 
     
     
-  def forward(self, x, y):
+  def forward(self, x, y=None):
     # Calculate class-conditional gains and biases
     gain = (1 + self.gain(y)).view(y.size(0), -1, 1, 1)
     bias = self.bias(y).view(y.size(0), -1, 1, 1)
