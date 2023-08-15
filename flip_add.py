@@ -77,7 +77,7 @@ def train_in_painter(settings):
             print((mask==0).all())
             print((and_mask==0).all())
 
-            mask = mask - and_mask
+            mask = np.logical_xor(mask, and_mask)
 
             if (mask == 0).all():
                 print(i)
