@@ -66,8 +66,8 @@ def train_in_painter(settings):
         mask = np.logical_xor(mask, and_mask)
         
         for i in range(1000):
-            im_ = np.fliplr(im).copy()
-            mask_ = np.fliplr(mask).copy()
+            im_ = np.fliplr(im.copy())
+            mask_ = np.fliplr(mask.copy())
 
             im_, mask_ = augment(im_, mask_)
 
@@ -76,13 +76,14 @@ def train_in_painter(settings):
 
             mask = np.logical_xor(mask, and_mask)
 
-
+            break
             if (mask == 0).all():
                 print(i)
                 break
         
 
-        #io.imsave(os.path.join(inpainted_result_dir, f"{idx}_mask.png"), mask.astype(np.uint8)*255)
+        io.imsave(os.path.join(inpainted_result_dir, f"{idx}_mask.png"), mask.astype(np.uint8)*255)
+        io.imsave(os.path.join(inpainted_result_dir, f"{idx}_and_mask.png"), and_mask.astype(np.uint8)*255)
         io.imsave(os.path.join(inpainted_result_dir, f"{idx}_flip.png"), im_)
         io.imsave(out_image_name, im)
         break
