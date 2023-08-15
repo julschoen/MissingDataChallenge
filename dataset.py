@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+from skimage import io
 from torch.utils.data.dataset import Dataset
 import os
 
