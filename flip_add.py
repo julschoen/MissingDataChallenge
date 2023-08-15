@@ -56,8 +56,8 @@ def train_in_painter(settings):
 
         mask = mask/255
 
-        im_ = np.fliplr(im).copy()
-        mask_ = np.fliplr(mask).copy()
+        im_ = np.fliplr(im.copy())
+        mask_ = np.fliplr(mask.copy())
 
         and_mask = np.logical_and(mask, np.logical_not(mask_))
         im[np.where(and_mask == 1)] = im_[np.where(and_mask==1)]
