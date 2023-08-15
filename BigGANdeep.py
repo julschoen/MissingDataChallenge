@@ -308,7 +308,7 @@ class DBlock(nn.Module):
 def D_arch(ch=64, attention='64',ksize='333333', dilation='111111'):
   arch = {}
 
-  arch[360] = {'in_channels' :  [ch*item for item in [1, 1, 2, 4, 8, 8]],
+  arch[360] = {'in_channels' :  [3]+[ch*item for item in [1, 1, 2, 4, 8, 8]],
                'out_channels' : [item * ch for item in [1, 1, 2, 4, 8, 8, 16]],
                'downsample' : [True] * 6 + [False],
                'resolution' : [180, 90, 45, 22, 11, 5, 5],
@@ -446,49 +446,3 @@ class Discriminator(nn.Module):
     # Get projection of final featureset onto class vectors and add to evidence
     out = out + torch.sum(self.embed(y) * h, 1, keepdim=True)
     return out
-
-# Parallelized G_D to minimize cross-gpu communication
-# Without this, Generator outputs would get all-gathered and then rebroadcast.
-class G_D(nn.Module):
-  def __init__(self, G, D):
-    super(G_D, self).__init__()
-    self.G = G
-    self.D = D
-
-  def forward(self, z, gy, x=None, dy=None, train_G=False, return_G_z=False,
-              split_D=False):              
-    # If training G, enable grad tape
-    with torch.set_grad_enabled(train_G):
-      # Get Generator output given noise
-      G_z = self.G(z, self.G.shared(gy))
-      # Cast as necessary
-      if self.G.fp16 and not self.D.fp16:
-        G_z = G_z.float()
-      if self.D.fp16 and not self.G.fp16:
-        G_z = G_z.half()
-    # Split_D means to run D once with real data and once with fake,
-    # rather than concatenating along the batch dimension.
-    if split_D:
-      D_fake = self.D(G_z, gy)
-      if x is not None:
-        D_real = self.D(x, dy)
-        return D_fake, D_real
-      else:
-        if return_G_z:
-          return D_fake, G_z
-        else:
-          return D_fake
-    # If real data is provided, concatenate it with the Generator's output
-    # along the batch dimension for improved efficiency.
-    else:
-      D_input = torch.cat([G_z, x], 0) if x is not None else G_z
-      D_class = torch.cat([gy, dy], 0) if dy is not None else gy
-      # Get Discriminator output
-      D_out = self.D(D_input, D_class)
-      if x is not None:
-        return torch.split(D_out, [G_z.shape[0], x.shape[0]]) # D_fake, D_real
-      else:
-        if return_G_z:
-          return D_out, G_z
-        else:
-          return D_out
