@@ -222,41 +222,41 @@ class Generator(nn.Module):
       # self.lr_sched = {'itr' : 0}# if self.progressive else {}
       # self.j = 0
 
-  # Initialize
-  def init_weights(self):
-    self.param_count = 0
-    for module in self.modules():
-      if (isinstance(module, nn.Conv2d) 
-          or isinstance(module, nn.Linear) 
-          or isinstance(module, nn.Embedding)):
-        if self.init == 'ortho':
-          init.orthogonal_(module.weight)
-        elif self.init == 'N02':
-          init.normal_(module.weight, 0, 0.02)
-        elif self.init in ['glorot', 'xavier']:
-          init.xavier_uniform_(module.weight)
-        else:
-          print('Init style not recognized...')
-        self.param_count += sum([p.data.nelement() for p in module.parameters()])
-    print('Param count for G''s initialized parameters: %d' % self.param_count)
+    # Initialize
+    def init_weights(self):
+      self.param_count = 0
+      for module in self.modules():
+        if (isinstance(module, nn.Conv2d) 
+            or isinstance(module, nn.Linear) 
+            or isinstance(module, nn.Embedding)):
+          if self.init == 'ortho':
+            init.orthogonal_(module.weight)
+          elif self.init == 'N02':
+            init.normal_(module.weight, 0, 0.02)
+          elif self.init in ['glorot', 'xavier']:
+            init.xavier_uniform_(module.weight)
+          else:
+            print('Init style not recognized...')
+          self.param_count += sum([p.data.nelement() for p in module.parameters()])
+      print('Param count for G''s initialized parameters: %d' % self.param_count)
 
-  # Note on this forward function: we pass in a y vector which has
-  # already been passed through G.shared to enable easy class-wise
-  # interpolation later. If we passed in the one-hot and then ran it through
-  # G.shared in this forward function, it would be harder to handle.
-  # NOTE: The z vs y dichotomy here is for compatibility with not-y
-  def forward(self, z):
-    h = self.linear(z)
-    # Reshape
-    h = h.view(h.size(0), -1, self.bottom_width, self.bottom_width)    
-    # Loop over blocks
-    for index, blocklist in enumerate(self.blocks):
-      # Second inner loop in case block has multiple layers
-      for block in blocklist:
-        h = block(h, y)
-        
-    # Apply batchnorm-relu-conv-tanh at output
-    return torch.tanh(self.output_layer(h))
+    # Note on this forward function: we pass in a y vector which has
+    # already been passed through G.shared to enable easy class-wise
+    # interpolation later. If we passed in the one-hot and then ran it through
+    # G.shared in this forward function, it would be harder to handle.
+    # NOTE: The z vs y dichotomy here is for compatibility with not-y
+    def forward(self, z):
+      h = self.linear(z)
+      # Reshape
+      h = h.view(h.size(0), -1, self.bottom_width, self.bottom_width)    
+      # Loop over blocks
+      for index, blocklist in enumerate(self.blocks):
+        # Second inner loop in case block has multiple layers
+        for block in blocklist:
+          h = block(h, y)
+          
+      # Apply batchnorm-relu-conv-tanh at output
+      return torch.tanh(self.output_layer(h))
 
 class DBlock(nn.Module):
   def __init__(self, in_channels, out_channels, which_conv=layers.SNConv2d, wide=True,
