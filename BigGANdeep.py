@@ -45,11 +45,11 @@ class GBlock(nn.Module):
     # upsample layers
     self.upsample = upsample
 
-  def forward(self, x, y):
+  def forward(self, x):
     # Project down to channel ratio
-    h = self.conv1(self.activation(self.bn1(x, y)))
+    h = self.conv1(self.activation(self.bn1(x)))
     # Apply next BN-ReLU
-    h = self.activation(self.bn2(h, y))
+    h = self.activation(self.bn2(h))
     # Drop channels in x if necessary
     if self.in_channels != self.out_channels:
       x = x[:, :self.out_channels]      
@@ -59,9 +59,9 @@ class GBlock(nn.Module):
       x = self.upsample(x)
     # 3x3 convs
     h = self.conv2(h)
-    h = self.conv3(self.activation(self.bn3(h, y)))
+    h = self.conv3(self.activation(self.bn3(h)))
     # Final 1x1 conv
-    h = self.conv4(self.activation(self.bn4(h, y)))
+    h = self.conv4(self.activation(self.bn4(h)))
     return h + x
 
 def G_arch(ch=64, attention='64', ksize='333333', dilation='111111'):
@@ -253,7 +253,7 @@ class Generator(nn.Module):
       for index, blocklist in enumerate(self.blocks):
         # Second inner loop in case block has multiple layers
         for block in blocklist:
-          h = block(h, y)
+          h = block(h)
           
       # Apply batchnorm-relu-conv-tanh at output
       return torch.tanh(self.output_layer(h))
