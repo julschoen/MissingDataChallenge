@@ -9,18 +9,19 @@ import numpy as np
 from skimage.transform import rotate
 
 def augment(x, y):
+    x_, y_ = x.copy(), y.copy()
     shift = np.random.randint(1,31)
     ax = np.random.randint(0,2)
     deg = np.random.randint(1,25)
 
     if np.random.uniform() > 0.5:
-        x = np.roll(x, shift, ax)
-        y = np.roll(y, shift, ax)
+        x_ = np.roll(x_, shift, ax)
+        y_ = np.roll(y_, shift, ax)
     else:
-        x = rotate(x, deg)
-        y = rotate(y, deg)
+        x_ = rotate(x_, deg)
+        y_ = rotate(y_, deg)
 
-    return x, y
+    return x_, y_
 
 def train_in_painter(settings):
     """
