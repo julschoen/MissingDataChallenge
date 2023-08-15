@@ -60,7 +60,7 @@ def train_in_painter(settings):
         im_ = np.fliplr(im).copy()
         mask_ = np.fliplr(mask).copy()
 
-        and_mask = np.logical_and(mask, mask_)
+        and_mask = np.logical_and(mask, np.logical_not(mask_))
         im[np.where(and_mask == 1)] = im_[np.where(and_mask==1)]
 
         mask = np.logical_xor(mask, mask_)
@@ -71,10 +71,10 @@ def train_in_painter(settings):
 
             im_, mask_ = augment(im_, mask_)
 
-            and_mask = np.logical_and(mask, mask_)
+            and_mask = np.logical_and(mask, np.logical_not(mask_))
             im[np.where(and_mask == 1)] = im_[np.where(and_mask==1)]
 
-            mask = np.logical_xor(mask, mask_)
+            mask = np.logical_xor(mask, and_mask)
 
             if (mask == 0).all():
                 break
