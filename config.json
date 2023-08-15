@@ -8,7 +8,7 @@
 	},
 	"dirs": {
 		"input_data_dir": "./MissingDataOpenData/",
-		"output_data_dir": "./missing_data_output/"
+		"output_data_dir": "./flip_out/"
 	},
 	"challenge_server": {
 		"address": "http://fungi.compute.dtu.dk:8080"
