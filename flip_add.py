@@ -63,7 +63,7 @@ def train_in_painter(settings):
         and_mask = np.logical_and(mask, np.logical_not(mask_))
         im[np.where(and_mask == 1)] = im_[np.where(and_mask==1)]
 
-        mask = np.logical_xor(mask, mask_)
+        mask = np.logical_xor(mask, and_mask)
 
         for i in range(1000):
             im_ = np.fliplr(im).copy()
