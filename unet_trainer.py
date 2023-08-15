@@ -16,6 +16,7 @@ from torch.cuda.amp import autocast, GradScaler
 
 import torchvision
 import torchvision.utils as vutils
+import torch.nn.functional as F
 
 from unet_model import UNet
 from dataset import Cats
