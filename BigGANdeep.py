@@ -319,7 +319,7 @@ def D_arch(ch=64, attention='64',ksize='333333', dilation='111111'):
 class Discriminator(nn.Module):
 
   def __init__(self, D_ch=64, D_wide=True, D_depth=2, resolution=360,
-               D_kernel_size=3, D_attn='64', n_classes=1000,
+               D_kernel_size=3, D_attn='64', n_classes=1,
                num_D_SVs=1, num_D_SV_itrs=1, D_activation=nn.ReLU(inplace=False),
                D_lr=2e-4, D_B1=0.0, D_B2=0.999, adam_eps=1e-8,
                SN_eps=1e-12, output_dim=1, D_mixed_precision=False, D_fp16=False,
@@ -442,7 +442,6 @@ class Discriminator(nn.Module):
     # Apply global sum pooling as in SN-GAN
     h = torch.sum(self.activation(h), [2, 3])
     # Get initial class-unconditional output
+    print(h.shape)
     out = self.linear(h)
-    # Get projection of final featureset onto class vectors and add to evidence
-    out = out + torch.sum(self.embed(y) * h, 1, keepdim=True)
     return out
