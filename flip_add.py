@@ -28,8 +28,8 @@ def train_in_painter(settings):
 
     sum_image = None
     for idx in file_ids:
-        in_image_name = os.path.join(input_data_dir, "masked", f"{idx}_stroke_masked.jpg")
-        in_mask_name = os.path.join(input_data_dir, "mask", f"{idx}_stroke_mask.jpg")
+        in_image_name = os.path.join(input_data_dir, "masked", f"{idx}_stroke_masked.png")
+        in_mask_name = os.path.join(input_data_dir, "mask", f"{idx}_stroke_mask.png")
 
         im = io.imread(in_image_name)
         mask = io.imread(in_mask_name)
