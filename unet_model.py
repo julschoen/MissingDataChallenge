@@ -32,7 +32,7 @@ class UNet(nn.Module):
         x = self.up3(x, x2)
         x = self.up4(x, x1)
         out = self.outc(x)
-        return torch.tanh(out)
+        return out
 
     def use_checkpointing(self):
         self.inc = torch.utils.checkpoint(self.inc)

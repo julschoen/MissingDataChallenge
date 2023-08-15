@@ -129,7 +129,7 @@ class Trainer(object):
 
             rec = self.unet(masked)
             mse_loss = F.mse_loss(rec, im)
-            ssim_loss = 1 - ssim(rec+1, im+1, data_range=2)
+            ssim_loss = 1 - ssim(rec, im, data_range=255)
 
             if self.p.only_ssim:
                 loss = ssim_loss

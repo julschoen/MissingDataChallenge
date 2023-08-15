@@ -27,8 +27,8 @@ class Cats(Dataset):
       p = os.path.join(self.input_data_dir, "originals", f"{idx}.jpg")
       im = io.imread(p)
       im = im.astype(np.float32)
-      im = im/255
-      im = (im*2)-1
+      #im = im/255
+      #im = (im*2)-1
       im = torch.from_numpy(im).float()
       ret.append(im)
 
@@ -37,8 +37,8 @@ class Cats(Dataset):
       p = os.path.join(self.input_data_dir, "masked", f"{idx}_stroke_masked.png")
       im = io.imread(p)
       im = im.astype(np.float32)
-      im = im/255
-      im = (im*2)-1
+      #im = im/255
+      #im = (im*2)-1
       im = torch.from_numpy(im).float()
       ret.append(im)
 
