@@ -126,7 +126,7 @@ class Trainer(object):
             im = im.to(self.p.device)
             masked = masked.to(self.p.device)
 
-            rec = self.p.unet(masked)
+            rec = self.unet(masked)
             mse_loss = F.mse_loss(rec, im)
             ssim_loss = 1 - ssim(rec+1, im+1, data_range=2)
 
