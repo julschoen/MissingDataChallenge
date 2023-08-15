@@ -22,7 +22,7 @@ from sync_batchnorm import SynchronizedBatchNorm2d as SyncBatchNorm2d
 # Channel ratio is the ratio of 
 class GBlock(nn.Module):
   def __init__(self, in_channels, out_channels,
-               which_conv=nn.Conv2d, which_bn=layers.bn, activation=None,
+               which_conv=nn.Conv2d, which_bn=nn.Conv2d, activation=None,
                upsample=None, channel_ratio=4):
     super(GBlock, self).__init__()
     
