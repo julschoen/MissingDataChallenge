@@ -135,7 +135,7 @@ class Generator(nn.Module):
       # Which convs, batchnorms, and linear layers to use
       if self.G_param == 'SN':
         self.which_conv = functools.partial(layers.SNConv2d,
-                            kernel_size=3, padding=1,
+                            kernel_size=3, padding=0,
                             num_svs=num_G_SVs, num_itrs=num_G_SV_itrs,
                             eps=self.SN_eps)
         self.which_linear = functools.partial(layers.SNLinear,
@@ -186,8 +186,7 @@ class Generator(nn.Module):
                                                   cross_replica=self.cross_replica,
                                                   mybn=self.mybn),
                                       self.activation,
-                                      layers.SNConv2d(self.arch['out_channels'][-1], 3, kernel_size=3, padding=0, num_svs=num_G_SVs, num_itrs=num_G_SV_itrs,
-                            eps=self.SN_eps))
+                                      self.which_conv(self.arch['out_channels'][-1], 3))
 
       # Initialize weights. Optionally skip init for testing.
       if not skip_init:
