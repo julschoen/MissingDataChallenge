@@ -165,7 +165,7 @@ class Generator(nn.Module):
       self.shared = (self.which_embedding(n_classes, self.shared_dim) if G_shared 
                       else layers.identity())
       # First linear layer
-      self.linear = self.which_linear(self.dim_z + self.shared_dim, self.arch['in_channels'][0] * (self.bottom_width **2))
+      self.linear = self.which_linear(self.dim_z, self.arch['in_channels'][0] * (self.bottom_width **2))
 
       # self.blocks is a doubly-nested list of modules, the outer loop intended
       # to be over blocks at a given resolution (resblocks and/or self-attention)
