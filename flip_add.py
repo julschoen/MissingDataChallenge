@@ -5,6 +5,7 @@ import pathlib
 import numpy as np
 from inpaint_config import InPaintConfig
 from inpaint_tools import read_file_list
+import numpy as np
 
 
 def train_in_painter(settings):
@@ -35,6 +36,7 @@ def train_in_painter(settings):
         mask = io.imread(in_mask_name)
 
         for _ in range(1000):
+            im = np.fliplr(im)
             print(im)
             print(mask)
 
