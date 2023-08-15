@@ -48,7 +48,6 @@ def train_in_painter(settings):
             if np.allclose(im, np.fliplr(im_)):
                 print(i)
                 break
-        break
 
 
 
