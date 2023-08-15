@@ -46,6 +46,7 @@ def train_in_painter(settings):
     for idx in file_ids:
         in_image_name = os.path.join(input_data_dir, "masked", f"{idx}_stroke_masked.png")
         in_mask_name = os.path.join(input_data_dir, "masks", f"{idx}_stroke_mask.png")
+        out_image_name = os.path.join(inpainted_result_dir, f"{idx}.png")
 
         im = io.imread(in_image_name)
         mask = io.imread(in_mask_name)
@@ -72,6 +73,8 @@ def train_in_painter(settings):
             if (mask == 0).all():
                 print(i)
                 break
+
+        io.imsave(out_image_name, im)
 
 
 
