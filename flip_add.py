@@ -64,7 +64,7 @@ def train_in_painter(settings):
         im[np.where(and_mask == 1)] = im_[np.where(and_mask==1)]
 
         mask = np.logical_xor(mask, and_mask)
-        """
+        
         for i in range(1000):
             im_ = np.fliplr(im).copy()
             mask_ = np.fliplr(mask).copy()
@@ -83,7 +83,7 @@ def train_in_painter(settings):
             if (mask == 0).all():
                 print(i)
                 break
-        """
+        
 
         io.imsave(os.path.join(inpainted_result_dir, f"{idx}_mask.png"), mask.astype(np.uint8)*255)
         io.imsave(os.path.join(inpainted_result_dir, f"{idx}_flip.png"), im_)
