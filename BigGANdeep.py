@@ -437,5 +437,5 @@ class Discriminator(nn.Module):
     # Get initial class-unconditional output
     
     out = self.linear(h)
-    print(h.shape)
+    print(out.shape)
     return out
