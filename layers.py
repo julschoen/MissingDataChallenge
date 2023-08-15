@@ -305,7 +305,7 @@ class ccbn(nn.Module):
     
   def forward(self, x):
     # Calculate class-conditional gains and biases
-    y = torch.ones(x.shape[0])
+    y = torch.ones(x.shape[0], device=x.device)
     gain = (1 + self.gain(y)).view(y.size(0), -1, 1, 1)
     bias = self.bias(y).view(y.size(0), -1, 1, 1)
     # If using my batchnorm
