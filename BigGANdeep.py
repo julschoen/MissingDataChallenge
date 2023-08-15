@@ -71,8 +71,7 @@ def G_arch(ch=64, attention='64', ksize='333333', dilation='111111'):
                'out_channels' : [item * ch for item in [8, 7, 4, 2, 1]],
                'upsample' : [True] * 6 + [False],
                'resolution' : [5 , 11, 22, 45, 90, 180, 360],
-                'attention' : {2**i: (2**i in [int(item) for item in attention.split('_')])
-                              for i in range(3,9)}}
+                'attention' : {45}}
 
   return arch
 
@@ -313,8 +312,7 @@ def D_arch(ch=64, attention='64',ksize='333333', dilation='111111'):
                'out_channels' : [item * ch for item in [1, 1, 2, 4, 8, 8, 16]],
                'downsample' : [True] * 6 + [False],
                'resolution' : [180, 90, 45, 22, 11, 5, 5],
-               'attention' : {2**i: 2**i in [int(item) for item in attention.split('_')]
-                              for i in range(2,9)}}
+               'attention' : {45}}
 
   return arch
 
