@@ -150,14 +150,6 @@ class Generator(nn.Module):
       self.which_embedding = nn.Embedding
       bn_linear = (functools.partial(self.which_linear, bias=False) if self.G_shared
                    else self.which_embedding)
-      self.which_bn = functools.partial(layers.ccbn,
-                            which_linear=bn_linear,
-                            cross_replica=self.cross_replica,
-                            mybn=self.mybn,
-                            input_size=(self.shared_dim + self.dim_z if self.G_shared
-                                        else self.n_classes),
-                            norm_style=self.norm_style,
-                            eps=self.BN_eps)
 
 
       # Prepare model
@@ -175,7 +167,6 @@ class Generator(nn.Module):
         self.blocks += [[GBlock(in_channels=self.arch['in_channels'][index],
                                out_channels=self.arch['in_channels'][index] if g_index==0 else self.arch['out_channels'][index],
                                which_conv=self.which_conv,
-                               #which_bn=self.which_bn,
                                activation=self.activation,
                                upsample=(functools.partial(F.interpolate, scale_factor=2)
                                          if self.arch['upsample'][index] and g_index == (self.G_depth-1) else None))]
@@ -245,7 +236,6 @@ class Generator(nn.Module):
     # G.shared in this forward function, it would be harder to handle.
     # NOTE: The z vs y dichotomy here is for compatibility with not-y
     def forward(self, z):
-      print(z.shape)
       h = self.linear(z)
       # Reshape
       h = h.view(h.size(0), -1, self.bottom_width, self.bottom_width)    
@@ -253,6 +243,7 @@ class Generator(nn.Module):
       for index, blocklist in enumerate(self.blocks):
         # Second inner loop in case block has multiple layers
         for block in blocklist:
+          print(h.shape)
           h = block(h)
           
       # Apply batchnorm-relu-conv-tanh at output
