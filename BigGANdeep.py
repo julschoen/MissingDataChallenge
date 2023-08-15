@@ -245,6 +245,7 @@ class Generator(nn.Module):
     # G.shared in this forward function, it would be harder to handle.
     # NOTE: The z vs y dichotomy here is for compatibility with not-y
     def forward(self, z):
+      print(z.shape)
       h = self.linear(z)
       # Reshape
       h = h.view(h.size(0), -1, self.bottom_width, self.bottom_width)    
