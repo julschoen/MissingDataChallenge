@@ -8,19 +8,19 @@ from inpaint_tools import read_file_list
 import numpy as np
 from skimage.transform import rotate
 
-def augment(im, mask):
+def augment(x, y):
     shift = np.random.randint(1,31)
     ax = np.random.randint(0,2)
     deg = np.random.randint(1,25)
 
     if np.random.uniform() > 0.5:
-        im = np.roll(im, shift, ax)
-        mask = np.roll(mask, shift, ax)
+        x = np.roll(x, shift, ax)
+        y = np.roll(y, shift, ax)
     else:
-        im = rotate(im, deg)
-        mask = rotate(mask, deg)
+        x = rotate(x, deg)
+        y = rotate(y, deg)
 
-    return im, mask
+    return x, y
 
 def train_in_painter(settings):
     """
