@@ -10,9 +10,9 @@ from skimage.transform import rotate
 
 def augment(x, y):
     x_, y_ = x.copy(), y.copy()
-    shift = np.random.randint(1,31)
+    shift = np.random.randint(1,11)
     ax = np.random.randint(0,2)
-    deg = np.random.randint(1,25)
+    deg = np.random.randint(1,6)
 
     if np.random.uniform() > 0.5:
         x_ = np.roll(x_, shift, ax)
