@@ -175,7 +175,7 @@ class Generator(nn.Module):
         self.blocks += [[GBlock(in_channels=self.arch['in_channels'][index],
                                out_channels=self.arch['in_channels'][index] if g_index==0 else self.arch['out_channels'][index],
                                which_conv=self.which_conv,
-                               which_bn=self.which_bn,
+                               #which_bn=self.which_bn,
                                activation=self.activation,
                                upsample=(functools.partial(F.interpolate, scale_factor=2)
                                          if self.arch['upsample'][index] and g_index == (self.G_depth-1) else None))]
