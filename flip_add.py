@@ -83,7 +83,7 @@ def train_in_painter(settings):
             if (mask == 0).all():
                 break
 
-        im = gaussian(im, 2, mode='reflect', preserve_range=True)
+        im = gaussian(im, 2, mode='reflect', preserve_range=True).astype(np.uint8)
         io.imsave(out_image_name, im)
 
 
