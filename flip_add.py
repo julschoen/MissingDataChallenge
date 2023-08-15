@@ -35,13 +35,19 @@ def train_in_painter(settings):
         im = io.imread(in_image_name)
         mask = io.imread(in_mask_name)
 
-        for _ in range(1000):
+        mask = mask/255
+
+        for i in range(1000):
             im_ = np.fliplr(im).copy()
             mask_ = np.fliplr(im).copy()
-            print(im)
-            print(mask)
 
-            break
+            im[np.where(mask == 1)] = im_[np.where(mask==1)]
+
+            mask = np.logical_xor(mask, mask_)
+
+            if np.allclose(im, np.fliplr(im_)):
+                print(i)
+                break
         break
 
 
