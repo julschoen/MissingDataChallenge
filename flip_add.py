@@ -75,9 +75,9 @@ def train_in_painter(settings):
 
             mask[np.where(and_mask == 1)] = 0
 
-            #if (mask == 0).all():
-            #    print(i)
-            #    break
+            if (mask == 0).all():
+                print(i)
+                break
         
 
         io.imsave(os.path.join(inpainted_result_dir, f"{idx}_mask.png"), mask.astype(np.uint8)*255)
