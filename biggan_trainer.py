@@ -178,8 +178,7 @@ class Trainer(object):
 
         self.netG.zero_grad()
         with autocast():
-            noise = torch.randn(self.p.batch_size, self.p.z_size, 1, 1,1,
-                            dtype=torch.float, device=self.device)
+            noise = torch.randn(self.p.batch_size, self.p.z_size, dtype=torch.float, device=self.device)
             
             fake = self.netG(noise)
             errG = -self.netD(fake).mean()
