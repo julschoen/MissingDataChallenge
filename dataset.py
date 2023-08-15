@@ -4,12 +4,12 @@ from torch.utils.data.dataset import Dataset
 import os
 
 class Cats(Dataset):
-  def __init__(self, input_data_dir, files_orig=None, files_masked=None, files_mask=None):
+  def __init__(self, path, files_orig=None, files_masked=None, files_mask=None):
     self.files_masked = files_masked
     self.files_mask = files_mask
     self.file_list = file_list
     self.len = len(self.file_list)
-    self.input_data_dir = input_data_dir
+    self.input_data_dir = path
 
   def __getitem__(self, index):
     ret = []
