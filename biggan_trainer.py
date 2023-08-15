@@ -84,8 +84,7 @@ class Trainer(object):
                     % (step, self.p.niters, d_real, d_fake, self.G_losses[-1], self.fid[-1]), flush=True)
 
     def log_interpolation(self, step):
-        noise = torch.randn(self.p.batch_size, self.p.z_size, 1, 1,1,
-                            dtype=torch.float, device=self.device)
+        noise = torch.randn(self.p.batch_size, self.p.z_size, dtype=torch.float, device=self.device)
         if self.fixed_test_noise is None:
             self.fixed_test_noise = noise.clone()
     
