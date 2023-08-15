@@ -71,7 +71,7 @@ class Trainer(object):
         mses = []
         ssims = []
         with torch.no_grad():
-            for x,y in dataset_val:
+            for x,y in self.generator_val:
                 x, y = x.to(self.p.device).permute(0,3,1,2), y.to(self.p.device).permute(0,3,1,2)
                 rec = self.unet(y)
                 mses.append(F.mse_loss(y,x).item())
@@ -87,7 +87,7 @@ class Trainer(object):
             vutils.make_grid(fake, padding=2, normalize=True)
             , os.path.join(self.images_dir, f'rec_{step}.png'))
 
-        torchvision.utils.save_image(
+        torchvision.utils.save_image(MSE: %.4f SSIM: %.4f
             vutils.make_grid(real, padding=2, normalize=True)
             , os.path.join(self.images_dir, f'target_{step}.png'))
 
