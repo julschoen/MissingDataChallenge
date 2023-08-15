@@ -7,7 +7,7 @@ from inpaint_config import InPaintConfig
 from inpaint_tools import read_file_list
 import numpy as np
 from skimage.transform import rotate
-from skimage.filters import gaussian_filter
+from skimage.filters import gaussian
 
 
 def augment(x, y):
@@ -83,7 +83,7 @@ def train_in_painter(settings):
             if (mask == 0).all():
                 break
 
-        im = gaussian_filter(im, 2, multichannel=True, mode='reflect')
+        im = gaussian(im, 2, multichannel=True, mode='reflect', preserve_range=True)
         io.imsave(out_image_name, im)
 
 
