@@ -77,7 +77,7 @@ class Trainer(object):
     def log_train(self, step, fake, real):
         with torch.no_grad():
             self.fid.append(
-                FID.fid(fake, real_images=real, device=self.p.device, batch_size=self.p.batch_size)
+                FID.fid(fake.float(), real_images=real.float(), device=self.p.device, batch_size=self.p.batch_size)
                 )
         d_real, d_fake = self.D_losses[-1]
         print('[%d|%d]\tD(x): %.4f\tD(G(z)): %.4f|%.4f\tFID %.4f'
