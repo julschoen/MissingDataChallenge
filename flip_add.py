@@ -36,7 +36,8 @@ def train_in_painter(settings):
         mask = io.imread(in_mask_name)
 
         for _ in range(1000):
-            im = np.fliplr(im)
+            im_ = np.fliplr(im).copy()
+            mask_ = np.fliplr(im).copy()
             print(im)
             print(mask)
 
