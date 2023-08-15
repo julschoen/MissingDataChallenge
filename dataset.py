@@ -7,14 +7,22 @@ class Cats(Dataset):
   def __init__(self, path, files_orig=None, files_masked=None, files_mask=None):
     self.files_masked = files_masked
     self.files_mask = files_mask
-    self.file_list = file_list
-    self.len = len(self.file_list)
+    self.files_orig = files_orig
+
+    if self.files_orig:
+      self.len = len(self.files_orig)
+
+    if self.files_masked:
+      self.len = len(self.files_masked)
+
+    if self.files_masked:
+      self.len = len(self.files_masked)
     self.input_data_dir = path
 
   def __getitem__(self, index):
     ret = []
-    if self.file_list:
-      idx = self.file_list[index]
+    if self.files_orig:
+      idx = self.files_orig[index]
       p = os.path.join(self.input_data_dir, "originals", f"{idx}.jpg")
       im = io.imread(p)
       im = im.astype(np.float32)
