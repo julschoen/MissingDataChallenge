@@ -243,11 +243,13 @@ class Generator(nn.Module):
       for index, blocklist in enumerate(self.blocks):
         # Second inner loop in case block has multiple layers
         for block in blocklist:
-          print(h.shape)
           h = block(h)
+          print(h.shape)
           
       # Apply batchnorm-relu-conv-tanh at output
-      return torch.tanh(self.output_layer(h))
+      out = self.output_layer(h)
+      print(out.shape)
+      return torch.tanh(out)
 
 class DBlock(nn.Module):
   def __init__(self, in_channels, out_channels, which_conv=layers.SNConv2d, wide=True,
