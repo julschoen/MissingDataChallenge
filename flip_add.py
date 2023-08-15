@@ -74,6 +74,9 @@ def train_in_painter(settings):
             and_mask = np.logical_and(mask, np.logical_not(mask_))
             im[np.where(and_mask == 1)] = im_[np.where(and_mask==1)]
 
+            print(mask)
+            print(and_mask)
+
             mask = mask - and_mask
 
             if (mask == 0).all():
