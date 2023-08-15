@@ -70,7 +70,7 @@ def G_arch(ch=64, attention='64', ksize='333333', dilation='111111'):
   arch[360] = {'in_channels' :  [ch*item for item in [16, 8, 8, 4, 4, 2, 1, 1]],
                'out_channels' : [item * ch for item in [8, 8, 4, 4, 2, 1]],
                'upsample' : [True] * 7,
-               'resolution' : [5 , 11, 22, 45, 90, 180, 360],
+               'resolution' : [6 , 12, 24, 48, 96, 192, 360],
                 'attention' : {45:45}}
 
   return arch
@@ -186,7 +186,8 @@ class Generator(nn.Module):
                                                   cross_replica=self.cross_replica,
                                                   mybn=self.mybn),
                                       self.activation,
-                                      self.which_conv(self.arch['out_channels'][-1], 3))
+                                      layers.SNConv2d(self.arch['out_channels'][-1], 3, kernel_size=3, padding=0, num_svs=num_G_SVs, num_itrs=num_G_SV_itrs,
+                            eps=self.SN_eps)))
 
       # Initialize weights. Optionally skip init for testing.
       if not skip_init:
