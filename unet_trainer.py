@@ -131,7 +131,10 @@ class Trainer(object):
             mse_loss = F.mse_loss(rec, im)
             ssim_loss = 1 - ssim(rec+1, im+1, data_range=2)
 
-            loss = mse_loss + ssim_loss
+            if self.p.only_ssim:
+                loss = ssim_loss
+            else:
+                loss = mse_loss + ssim_loss
 
             loss.backward()
             self.opt.step()
@@ -158,6 +161,7 @@ def main():
     parser.add_argument('--log_dir', type=str, default='unet', help='Save Location')
     parser.add_argument('--device', type=str, default='cuda', help='Torch Device Choice')
     parser.add_argument('--load_params', type=bool, default=False, help='Load Parameters form pickle in log dir')
+    parser.add_argument('--only_ssim', type=bool ,default=False)
     args = parser.parse_args()
 
 
