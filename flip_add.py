@@ -57,16 +57,20 @@ def train_in_painter(settings):
 
         mask = mask/255
 
-        im_ = np.fliplr(im.copy())
-        mask_ = np.fliplr(mask.copy())
+        im_ = im.copy()
+        mask_ = mask.copy()
+        im_ = np.fliplr(im_)
+        mask_ = np.fliplr(mask_)
 
         and_mask = np.logical_and(mask, np.logical_not(mask_))
         im[and_mask] = im_[and_mask]
         mask[and_mask] = 0
         
         for i in range(1000):
-            im_ = np.fliplr(im.copy())
-            mask_ = np.fliplr(mask.copy())
+            im_ = im.copy()
+            mask_ = mask.copy()
+            im_ = np.fliplr(im_)
+            mask_ = np.fliplr(mask_)
 
             im_aug, mask_aug = augment(im_, mask_)
 
