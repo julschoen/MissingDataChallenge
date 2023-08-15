@@ -95,7 +95,7 @@ class Generator(nn.Module):
       # Dimensionality of the latent space
       self.dim_z = dim_z
       # The initial spatial dimensions
-      self.bottom_width = 5
+      self.bottom_width = 6
       # Resolution of the output
       self.resolution = 360
       # Kernel size?
