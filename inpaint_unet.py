@@ -21,7 +21,7 @@ def inpaint_one_image(model, in_image):
     rec = rec*255
     rec = rec.astype(np.uint8)
 
-    return inpaint_image
+    return rec
 
 
 def inpaint_images(settings):
