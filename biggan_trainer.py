@@ -72,7 +72,7 @@ class Trainer(object):
     def inf_train_gen(self):
         while True:
             for data in self.generator_train:
-                yield data.to(memory_format=torch.channels_first)
+                yield data.permute(1,2,0)
         
     def log_train(self, step, fake, real):
         with torch.no_grad():
