@@ -79,11 +79,9 @@ def train_in_painter(settings):
             mask[and_mask] = 0
 
             if (mask == 0).all():
-                print(i)
                 break
-                
+
         io.imsave(out_image_name, im)
-        break
 
 
 
