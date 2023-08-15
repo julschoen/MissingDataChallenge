@@ -87,7 +87,7 @@ class Trainer(object):
             vutils.make_grid(fake, padding=2, normalize=True)
             , os.path.join(self.images_dir, f'rec_{step}.png'))
 
-        torchvision.utils.save_image(MSE: %.4f SSIM: %.4f
+        torchvision.utils.save_image(
             vutils.make_grid(real, padding=2, normalize=True)
             , os.path.join(self.images_dir, f'target_{step}.png'))
 
