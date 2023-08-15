@@ -187,7 +187,7 @@ class Generator(nn.Module):
                                                   mybn=self.mybn),
                                       self.activation,
                                       layers.SNConv2d(self.arch['out_channels'][-1], 3, kernel_size=3, padding=0, num_svs=num_G_SVs, num_itrs=num_G_SV_itrs,
-                            eps=self.SN_eps)))
+                            eps=self.SN_eps))
 
       # Initialize weights. Optionally skip init for testing.
       if not skip_init:
