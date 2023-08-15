@@ -12,9 +12,9 @@ from skimage.filters import gaussian
 
 def augment(x, y):
     x_, y_ = x.copy(), y.copy()
-    shift = np.random.randint(10,21)
+    shift = np.random.randint(1,11)
     ax = np.random.randint(0,2)
-    deg = np.random.randint(6,12)
+    deg = np.random.randint(1,6)
 
     if np.random.uniform() > 0.5:
         x_ = np.roll(x_, shift, ax)
@@ -83,7 +83,7 @@ def train_in_painter(settings):
             if (mask == 0).all():
                 break
 
-        im = gaussian(im, 0.5, mode='reflect', preserve_range=True).astype(np.uint8)
+        im = gaussian(im, 1, mode='reflect', preserve_range=True).astype(np.uint8)
         io.imsave(out_image_name, im)
 
 
