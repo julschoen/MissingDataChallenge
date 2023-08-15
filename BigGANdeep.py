@@ -76,7 +76,7 @@ def G_arch(ch=64, attention='64', ksize='333333', dilation='111111'):
   return arch
 
 class Generator(nn.Module):
-    def __init__(self, G_ch=64, G_depth=2, dim_z=512, bottom_width=4, resolution=360,
+    def __init__(self, G_ch=64, G_depth=2, dim_z=512,
                G_kernel_size=3, G_attn='64', n_classes=1,
                num_G_SVs=1, num_G_SV_itrs=1,
                G_shared=True, shared_dim=0, hier=False,
@@ -95,9 +95,9 @@ class Generator(nn.Module):
       # Dimensionality of the latent space
       self.dim_z = dim_z
       # The initial spatial dimensions
-      self.bottom_width = bottom_width
+      self.bottom_width = 5
       # Resolution of the output
-      self.resolution = resolution
+      self.resolution = 360
       # Kernel size?
       self.kernel_size = G_kernel_size
       # Attention?
