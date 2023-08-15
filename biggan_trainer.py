@@ -13,8 +13,6 @@ from torch.utils.data import DataLoader
 from torch.autograd import Variable, grad
 from torch.cuda.amp import autocast, GradScaler
 
-from skimage import io
-
 import torchvision
 import torchvision.utils as vutils
 
@@ -157,8 +155,7 @@ class Trainer(object):
         self.netD.zero_grad()
 
         with autocast():
-            noise = torch.randn(real.shape[0], self.p.z_size, 1, 1,1,
-                        dtype=torch.float, device=self.device)
+            noise = torch.randn(real.shape[0], self.p.z_size, dtype=torch.float, device=self.device)
 
             fake = self.netG(noise)
 
