@@ -7,7 +7,6 @@ class UNet(nn.Module):
     def __init__(self, n_channels=3, bilinear=False):
         super(UNet, self).__init__()
         self.n_channels = n_channels
-        self.n_classes = n_classes
         self.bilinear = bilinear
 
         self.inc = (DoubleConv(n_channels, 64))
