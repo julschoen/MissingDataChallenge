@@ -60,8 +60,8 @@ class Trainer(object):
 
     def inf_train_gen(self):
         while True:
-            for data in self.generator_train:
-                yield data.permute(0,3,1,2)
+            for x,y in self.generator_train:
+                yield x.permute(0,3,1,2), y.permute(0,3,1,2)
         
     def log_train(self, step):
         l1, l2 = self.losses[-1]
