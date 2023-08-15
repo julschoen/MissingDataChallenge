@@ -182,7 +182,7 @@ class Generator(nn.Module):
                          for g_index in range(self.G_depth)]
 
         # If attention on this block, attach it to the end
-        if self.arch['attention'][self.arch['resolution'][index]]:
+        if self.arch['resolution'][index] == 45:
           print('Adding attention layer in G at resolution %d' % self.arch['resolution'][index])
           self.blocks[-1] += [layers.Attention(self.arch['out_channels'][index], self.which_conv)]
 
@@ -384,7 +384,7 @@ class Discriminator(nn.Module):
                        downsample=(nn.AvgPool2d(2) if self.arch['downsample'][index] and d_index==0 else None))
                        for d_index in range(self.D_depth)]]
       # If attention on this block, attach it to the end
-      if self.arch['attention'][self.arch['resolution'][index]]:
+      if self.arch['resolution'][index] == 45:
         print('Adding attention layer in D at resolution %d' % self.arch['resolution'][index])
         self.blocks[-1] += [layers.Attention(self.arch['out_channels'][index],
                                              self.which_conv)]
