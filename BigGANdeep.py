@@ -77,6 +77,8 @@ def G_arch(ch=64, attention='64', ksize='333333', dilation='111111'):
   return arch
 
 class Generator(nn.Module):
+    def __init__(self, G_ch=64, G_depth=2, dim_z=512, bottom_width=4, resolution=360,
+               G_kernel_size=3, G_attn='64', n_classes=1,
                num_G_SVs=1, num_G_SV_itrs=1,
                G_shared=True, shared_dim=0, hier=False,
                cross_replica=False, mybn=False,
