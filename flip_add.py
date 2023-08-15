@@ -76,16 +76,13 @@ def train_in_painter(settings):
 
             mask = np.logical_xor(mask, and_mask)
 
-            print((mask==0).all())
-            print((and_mask==0).all())
-
 
             if (mask == 0).all():
                 print(i)
                 break
         
 
-        io.imsave(os.path.join(inpainted_result_dir, f"{idx}_mask.png"), mask.astype(np.uint8)*255)
+        #io.imsave(os.path.join(inpainted_result_dir, f"{idx}_mask.png"), mask.astype(np.uint8)*255)
         io.imsave(os.path.join(inpainted_result_dir, f"{idx}_flip.png"), im_)
         io.imsave(out_image_name, im)
         break
