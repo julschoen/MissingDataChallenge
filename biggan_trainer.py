@@ -227,7 +227,7 @@ def main():
     parser = argparse.ArgumentParser()
     ## MISC & Hyper
     parser.add_argument('--niters', type=int, default=5000, help='Number of training iterations')
-    parser.add_argument('--batch_size', type=int, default=16, help='Batch size')
+    parser.add_argument('--batch_size', type=int, default=256, help='Batch size')
     parser.add_argument('--z_size', type=int, default=512, help='Latent space dimension')
     parser.add_argument('--iterD', type=int, default=2, help='Number of D iters per iter')
     parser.add_argument('--lrG', type=float, default=5e-5, help='Learning rate G')
