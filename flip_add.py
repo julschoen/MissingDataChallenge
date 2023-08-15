@@ -13,7 +13,7 @@ def augment(x, y):
     shift = np.random.randint(1,31)
     ax = np.random.randint(0,2)
     deg = np.random.randint(1,25)
-mask
+
     if np.random.uniform() > 0.5:
         x_ = np.roll(x_, shift, ax)
         y_ = np.roll(y_, shift, ax)
