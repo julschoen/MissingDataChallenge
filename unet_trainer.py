@@ -24,7 +24,7 @@ from inpaint_tools import read_file_list
 
 
 class Trainer(object):
-    def __init__(self, dataset, params):
+    def __init__(self, dataset_train, dataset_val, params):
         ### Misc ###
         self.device = params.device
 
@@ -54,7 +54,8 @@ class Trainer(object):
         self.scaler = GradScaler()
 
         ### Make Data Generator ###
-        self.generator_train = DataLoader(dataset, batch_size=self.p.batch_size, shuffle=True, num_workers=4, drop_last=True)
+        self.generator_train = DataLoader(dataset_train, batch_size=self.p.batch_size, shuffle=True, num_workers=4, drop_last=True)
+        self.generator_val = DataLoader(dataset_val, batch_size=self.p.batch_size, shuffle=True, num_workers=4, drop_last=False)
 
         ### Prep Training
         self.losses = []
@@ -66,7 +67,20 @@ class Trainer(object):
         
     def log_train(self, step):
         l1, l2 = self.losses[-1]
-        print('[%d|%d]\tMSE: %.4f\tSSIM: %.4f' % (step, self.p.niters, l1, l2), flush=True)
+
+        mses = []
+        ssims = []
+        with torch.no_grad():
+            for x,y in dataset_val:
+                x, y = x.to(self.p.device).permute(0,3,1,2), y.to(self.p.device).permute(0,3,1,2)
+                rec = self.unet(y)
+                mses.append(F.mse_loss(y,x).item())
+                ssims.append(ssim(y,x, data_range=255).item())
+
+        mses = np.mean(mses)
+        ssims = np.mean(ssims)
+
+        print('[%d|%d] MSE: %.4f SSIM: %.4f\tVal MSE: %.4f SSIM: %.4f' % (step, self.p.niters, l1, l2, mses,ssims), flush=True)
 
     def log_interpolation(self, step, fake, real):
         torchvision.utils.save_image(
@@ -167,9 +181,10 @@ def main():
 
     file_list = os.path.join("./MissingDataOpenData/", "data_splits", "training.txt")
     file_ids = read_file_list(file_list)
-    dataset_train = Cats(path="./MissingDataOpenData/", files_orig=file_ids, files_masked=file_ids)
+    dataset_train = Cats(path="./MissingDataOpenData/", files_orig=file_ids[:4200], files_masked=file_ids[:4200])
+    dataset_val = Cats(path="./MissingDataOpenData/", files_orig=file_ids[4200:], files_masked=file_ids[4200:])
 
-    trainer = Trainer(dataset_train, params=args)
+    trainer = Trainer(dataset_train, dataset_val, params=args)
     trainer.train()
 
 if __name__ == '__main__':
