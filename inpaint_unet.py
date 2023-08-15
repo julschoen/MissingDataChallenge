@@ -41,8 +41,6 @@ def inpaint_images(settings):
 
     print(f"InPainting {data_set} and placing results in {inpainted_result_dir} with model from {model_dir}")
 
-    avg_img_name = os.path.join(model_dir, "average_image.png")
-    avg_img = io.imread(avg_img_name)
 
     file_list = os.path.join(input_data_dir, "data_splits", data_set + ".txt")
     file_ids = read_file_list(file_list)
