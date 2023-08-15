@@ -77,6 +77,7 @@ def train_in_painter(settings):
             mask = np.logical_xor(mask, and_mask)
 
             if (mask == 0).all():
+                print(i)
                 break
 
         io.imsave(out_image_name, im)
