@@ -14,12 +14,12 @@ def augment(x, y):
     ax = np.random.randint(0,2)
     deg = np.random.randint(1,25)
 
-    if np.random.uniform() > 0.5:
-        x_ = np.roll(x_, shift, ax)
-        y_ = np.roll(y_, shift, ax)
-    else:
-        x_ = rotate(x_, deg)
-        y_ = rotate(y_, deg)
+    #if np.random.uniform() > 0.5:
+    x_ = np.roll(x_, shift, ax)
+    y_ = np.roll(y_, shift, ax)
+    #else:
+    #    x_ = rotate(x_, deg)
+    #    y_ = rotate(y_, deg)
 
     return x_, y_
 
