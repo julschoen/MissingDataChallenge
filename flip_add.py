@@ -40,7 +40,8 @@ def train_in_painter(settings):
     if file_ids is None:
         return
 
-    inpainted_result_dir = os.path.join(output_data_dir, f"inpainted_{settings["data_set"]}")
+    data_set = settings["data_set"]
+    inpainted_result_dir = os.path.join(output_data_dir, f"inpainted_{data_set}")
     pathlib.Path(inpainted_result_dir).mkdir(parents=True, exist_ok=True)
 
     print(f"Training on {len(file_ids)} images")
