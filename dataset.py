@@ -50,7 +50,7 @@ class Cats(Dataset):
       im = torch.from_numpy(im).float()
       ret.append(im)
 
-    return *ret
+    return tuple(ret)
 
   def __len__(self):
     return self.len
