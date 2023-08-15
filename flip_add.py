@@ -6,7 +6,22 @@ import numpy as np
 from inpaint_config import InPaintConfig
 from inpaint_tools import read_file_list
 import numpy as np
+from skimage.transform import rotate
 
+def augment(im, mask):
+    shift = np.random.randint(1,11)
+    ax = np.random.randint(0,2)
+    deg = np.random.randint(1,6)
+
+    if np.random.uniform() > 0.5:
+        im = np.roll(im, shift, ax)
+        mask = np.roll(mask, shift, ax)
+
+    if np.random.uniform() > 0.5:
+        im = rotate(im, deg)
+        mask = rotate(mask, deg)
+
+    return im, mask
 
 def train_in_painter(settings):
     """
@@ -37,15 +52,24 @@ def train_in_painter(settings):
 
         mask = mask/255
 
+        im_ = np.fliplr(im).copy()
+        mask_ = np.fliplr(mask).copy()
+
+        im[np.where(mask == 1)] = im_[np.where(mask==1)]
+
+        mask = np.logical_xor(mask, mask_)
+
         for i in range(1000):
             im_ = np.fliplr(im).copy()
             mask_ = np.fliplr(mask).copy()
+
+            im_, mask_ = augment(im_, mask_)
 
             im[np.where(mask == 1)] = im_[np.where(mask==1)]
 
             mask = np.logical_xor(mask, mask_)
 
-            if np.allclose(im, np.fliplr(im_)):
+            if (mask == 0).all():
                 print(i)
                 break
 
