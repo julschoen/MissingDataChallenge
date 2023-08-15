@@ -304,7 +304,7 @@ def D_arch(ch=64, attention='64',ksize='333333', dilation='111111'):
                'out_channels' : [item * ch for item in [1, 1, 2, 4, 8, 8, 16]],
                'downsample' : [True] * 6 + [False],
                'resolution' : [180, 90, 45, 22, 11, 5, 5],
-               'attention' : {45:45}}
+               'attention' : {90:90}}
 
   return arch
 
