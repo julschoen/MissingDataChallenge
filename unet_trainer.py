@@ -128,6 +128,7 @@ class Trainer(object):
             masked = masked.to(self.p.device)
 
             rec = self.unet(masked)
+            print(rec.shape)
             mse_loss = F.mse_loss(rec, im)
             ssim_loss = 1 - ssim(rec+1, im+1, data_range=2)
 
@@ -136,7 +137,7 @@ class Trainer(object):
             loss.backward()
             self.opt.step()
 
-            self.losses.append((mse_loss.detach().item()), ssim_loss.detach().item())
+            self.losses.append((mse_loss.detach().item(), ssim_loss.detach().item()))
             self.log(i, rec, im)
             if i%100 == 0 and i>0:
                 self.save_checkpoint(i)
