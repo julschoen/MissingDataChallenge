@@ -84,7 +84,9 @@ def train_in_painter(settings):
         io.imsave(os.path.join(inpainted_result_dir, f"{idx}_mask.png"), mask.astype(np.uint8)*255)
         io.imsave(os.path.join(inpainted_result_dir, f"{idx}_and_mask.png"), and_mask.astype(np.uint8)*255)
         io.imsave(os.path.join(inpainted_result_dir, f"{idx}_mask_.png"), mask_.astype(np.uint8)*255)
-        io.imsave(os.path.join(inpainted_result_dir, f"{idx}_flip.png"), im_*and_mask)
+        save_im = im_.copy()
+        save_im[np.logical_not(and_mask)] = [0,0,0]
+        io.imsave(os.path.join(inpainted_result_dir, f"{idx}_flip.png"), save_im)
         io.imsave(out_image_name, im)
         break
 
