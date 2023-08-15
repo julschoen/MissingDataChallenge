@@ -16,8 +16,7 @@ def augment(im, mask):
     if np.random.uniform() > 0.5:
         im = np.roll(im, shift, ax)
         mask = np.roll(mask, shift, ax)
-
-    if np.random.uniform() > 0.5:
+    else:
         im = rotate(im, deg)
         mask = rotate(mask, deg)
 
@@ -84,7 +83,7 @@ def train_in_painter(settings):
 
         io.imsave(os.path.join(inpainted_result_dir, f"{idx}_mask.png"), mask.astype(np.uint8)*255)
         io.imsave(os.path.join(inpainted_result_dir, f"{idx}_and_mask.png"), and_mask.astype(np.uint8)*255)
-        io.imsave(os.path.join(inpainted_result_dir, f"{idx}_and_mask.png"), mask_.astype(np.uint8)*255)
+        io.imsave(os.path.join(inpainted_result_dir, f"{idx}_mask_.png"), mask_.astype(np.uint8)*255)
         io.imsave(os.path.join(inpainted_result_dir, f"{idx}_flip.png"), im_)
         io.imsave(out_image_name, im)
         break
