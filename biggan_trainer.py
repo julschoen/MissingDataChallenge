@@ -46,7 +46,7 @@ class Trainer(object):
 
         ### Make Models ###
         self.netD = Discriminator().to(self.device)
-        self.netG = Generator().to(self.device)
+        self.netG = Generator(dim_z=self.p.z_size).to(self.device)
         
         if self.p.ngpu > 1:
             self.netD = nn.DataParallel(self.netD)
