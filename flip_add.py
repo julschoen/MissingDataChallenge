@@ -39,7 +39,7 @@ def train_in_painter(settings):
 
         for i in range(1000):
             im_ = np.fliplr(im).copy()
-            mask_ = np.fliplr(im).copy()
+            mask_ = np.fliplr(mask).copy()
 
             im[np.where(mask == 1)] = im_[np.where(mask==1)]
 
