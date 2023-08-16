@@ -65,7 +65,6 @@ class GBlock(nn.Module):
     return h + x
 
 def G_arch(ch=64, attention='64', ksize='333333', dilation='111111'):
-  def G_arch(ch=64, attention='64', ksize='333333', dilation='111111'):
   arch = {}
 
   arch[360] = {'in_channels' :  [ch*item for item in [16, 8, 8, 4, 4, 2, 1, 1]],
