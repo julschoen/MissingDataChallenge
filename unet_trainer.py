@@ -49,7 +49,7 @@ class Trainer(object):
         self.p = params
 
         ### Make Models ###
-        self.unet = PConvUNet().to(self.p.device)
+        self.unet = UNet2().to(self.p.device)
 
         self.opt = optim.Adam(self.unet.parameters(), lr=self.p.lr, betas=(0., 0.9))
 
