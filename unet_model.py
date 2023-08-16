@@ -96,13 +96,13 @@ class UNet2(nn.Module):
         return x
 
 class downStep(nn.Module):
-    def __init__(self, inC, outC, firstLayer=False):
+    def __init__(self, inC, outC, firstLayer=False, keep_div=False):
         super(downStep, self).__init__()
         # todo
         self.firstLayer = firstLayer
-
+        padding = 0 if keep_div else 1
         self.conv = nn.Sequential(
-            nn.Conv2d(inC, outC, 3, padding=1),
+            nn.Conv2d(inC, outC, 3, padding=padding),
             nn.ReLU(),
             nn.Conv2d(outC, outC, 3, padding=1),
             nn.ReLU())
