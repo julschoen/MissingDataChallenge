@@ -62,12 +62,14 @@ class Trainer(object):
 
     def inf_train_gen(self):
         while True:
-            for x,y in self.generator_train:
+            for x,y,z in self.generator_train:
                 x = x/255
                 x = (x*2)-1
                 y = y/255
                 y = (y*2)-1
-                yield x.permute(0,3,1,2), y.permute(0,3,1,2)
+                y = y.permute(0,3,1,2)
+                y = torch.concat((y,z), dim=1)
+                yield x.permute(0,3,1,2), y
         
     def log_train(self, step):
         l1, l2 = self.losses[-1]
@@ -75,12 +77,14 @@ class Trainer(object):
         mses = []
         ssims = []
         with torch.no_grad():
-            for x,y in self.generator_val:
+            for x,y,z in self.generator_val:
                 x = x/255
                 x = (x*2)-1
                 y = y/255
                 y = (y*2)-1
-                x, y = x.to(self.p.device).permute(0,3,1,2), y.to(self.p.device).permute(0,3,1,2)
+                y = y.permute(0,3,1,2)
+                y = torch.concat((y,z), dim=1)
+                x, y = x.to(self.p.device).permute(0,3,1,2), y.to(self.p.device)
                 rec = self.unet(y)
                 mses.append(F.mse_loss(y,x).item())
                 ssims.append(ssim(y+1,x+1, data_range=2).item())
@@ -189,8 +193,8 @@ def main():
 
     file_list = os.path.join("./MissingDataOpenData/", "data_splits", "training.txt")
     file_ids = read_file_list(file_list)
-    dataset_train = Cats(path="./MissingDataOpenData/", files_orig=file_ids[:4200], files_masked=file_ids[:4200])
-    dataset_val = Cats(path="./MissingDataOpenData/", files_orig=file_ids[4200:], files_masked=file_ids[4200:])
+    dataset_train = Cats(path="./MissingDataOpenData/", files_orig=file_ids[:4200], files_masked=file_ids[:4200], files_mask=file_ids[:4200])
+    dataset_val = Cats(path="./MissingDataOpenData/", files_orig=file_ids[4200:], files_masked=file_ids[4200:], files_mask=file_ids[4200:])
 
     trainer = Trainer(dataset_train, dataset_val, params=args)
     trainer.train()
