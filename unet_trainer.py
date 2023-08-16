@@ -173,7 +173,7 @@ class Trainer(object):
             loss.backward()
             self.opt.step()
 
-            if i%10==0: print(loss)
+            if i%10==0: print(loss.detach().item())
             self.losses.append((mse_loss.detach().item(), ssim_loss.detach().item()))
             self.log(i, rec, im)
             if i%100 == 0 and i>0:
