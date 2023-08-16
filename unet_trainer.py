@@ -59,6 +59,7 @@ class Trainer(object):
         self.generator_val = DataLoader(dataset_val, batch_size=self.p.batch_size, shuffle=True, num_workers=4, drop_last=False)
 
         self.inpaint_loss = InpaintingLoss(device=self.p.device)
+        self.coefs = {'valid': 1.0, 'hole': 6.0, 'tv': 0.1, 'prc': 0.05, 'style': 120.0}
 
         ### Prep Training
         self.losses = []
@@ -159,12 +160,15 @@ class Trainer(object):
             ssim_loss = 1 - ssim(rec+1, im+1, data_range=2)
 
             losses = self.inpaint_loss(masked[:,:3,:,:], masked[:,3,:,:].unsqueeze(1), rec, im)
-            print(losses)
+            loss = torch.tensor(0, device=self.p.device)
+            for key in self.coefs.keys():
+                loss += self.coefs[key] * losses[key]
 
-            if self.p.only_ssim:
-                loss = ssim_loss
-            else:
-                loss = mse_loss + 5*ssim_loss
+
+            #if self.p.only_ssim:
+            #    loss += ssim_loss
+            #else:
+            #    loss = mse_loss + 5*ssim_loss
 
             loss.backward()
             self.opt.step()
