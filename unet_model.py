@@ -92,7 +92,7 @@ class UNet2(nn.Module):
 
         x = self.conv(x)
         print(x.shape)
-        x = self.tanh(x)
+        x = torch.tanh(x)
         return x
 
 class downStep(nn.Module):
@@ -127,9 +127,8 @@ class upStep(nn.Module):
             nn.ReLU(),
             nn.Conv2d(outC, outC, 3, padding=1),
             nn.ReLU())
-        kernel = 2 if keep_div else 2
         pad = 1 if keep_div else 0
-        self.upsampling = nn.ConvTranspose2d(inC, outC, kernel, stride=2, padding=pad)
+        self.upsampling = nn.ConvTranspose2d(inC, outC, 2, stride=2, padding=pad)
 
     def forward(self, x, x_down):
         # todo
