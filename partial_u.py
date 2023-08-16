@@ -156,4 +156,4 @@ class PConvUNet(nn.Module):
             h_mask = torch.cat([h_mask, h_mask_dict[enc_h_key]], dim=1)
             h, h_mask = getattr(self, dec_l_key)(h, h_mask)
 
-        return h, h_mask
+        return torch.tanh(h)
