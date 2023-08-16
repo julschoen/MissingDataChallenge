@@ -72,6 +72,8 @@ class Trainer(object):
     def inf_train_gen(self):
         while True:
             for data in self.generator_train:
+                data = data/255
+                data = (data*2)-1
                 yield data.permute(0,3,1,2)
         
     def log_train(self, step, fake, real):
