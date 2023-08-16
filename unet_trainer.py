@@ -76,6 +76,10 @@ class Trainer(object):
         ssims = []
         with torch.no_grad():
             for x,y in self.generator_val:
+                x = x/255
+                x = (x*2)-1
+                y = y/255
+                y = (y*2)-1
                 x, y = x.to(self.p.device).permute(0,3,1,2), y.to(self.p.device).permute(0,3,1,2)
                 rec = self.unet(y)
                 mses.append(F.mse_loss(y,x).item())
