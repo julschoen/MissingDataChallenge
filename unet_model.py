@@ -69,7 +69,7 @@ class UNet2(nn.Module):
         self.conv = nn.Conv2d(64, 3, 1)
 
     def forward(self, x):
-        x = F.interpolate(x, size=386)
+        x = F.interpolate(x, size=384)
         x1 = self.downStep1(x)
         x2 = self.downStep2(x1)
         x3 = self.downStep3(x2)
