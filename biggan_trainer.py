@@ -17,6 +17,8 @@ import torchvision
 import torchvision.utils as vutils
 
 from BigGANdeep import Discriminator, Generator
+from BigGANdeep2 import Discriminator as D2
+from BigGANdeep2 import Generator as G2
 from dataset import Cats
 from inpaint_tools import read_file_list
 
@@ -45,14 +47,19 @@ class Trainer(object):
         self.p = params
 
         ### Make Models ###
-        self.netD = Discriminator().to(self.device)
-        self.netG = Generator(dim_z=self.p.z_size).to(self.device)
+        if self.p.biggan2:
+            self.netD = D2().to(self.device)
+            self.netG = G2(dim_z=self.p.z_size).to(self.device)
+            self.y = torch.zeros(self.p.batch_size, device=self.p.device)
+        else:
+            self.netD = Discriminator().to(self.device)
+            self.netG = Generator(dim_z=self.p.z_size).to(self.device)
         
         if self.p.ngpu > 1:
             self.netD = nn.DataParallel(self.netD)
             self.netG = nn.DataParallel(self.netG)
 
-        self.optimizerD = optim.Adam(self.netD.parameters(), lr=self.p.lrD, betas=(0., 0.999))
+        self.optimizerD = optim.Adam(self.netD.parameters(), lr=self.p.lrD, betas=(0., 0.99))9))
         self.optimizerG = optim.Adam(self.netG.parameters(), lr=self.p.lrG, betas=(0., 0.999))
 
         self.scalerD = GradScaler()
@@ -151,7 +158,10 @@ class Trainer(object):
         with autocast():
             noise = torch.randn(real.shape[0], self.p.z_size, dtype=torch.float, device=self.device)
 
-            fake = self.netG(noise)
+            if self.p.biggan2:
+                fake = self.netG(noise, self.y)
+            else:
+                fake = self.netG(noise)
 
             errD_real = (nn.ReLU()(1.0 - self.netD(real))).mean()
             errD_fake = (nn.ReLU()(1.0 + self.netD(fake))).mean()
@@ -174,7 +184,11 @@ class Trainer(object):
         with autocast():
             noise = torch.randn(self.p.batch_size, self.p.z_size, dtype=torch.float, device=self.device)
             
-            fake = self.netG(noise)
+            if self.p.biggan2:
+                fake = self.netG(noise, self.y)
+            else:
+                fake = self.netG(noise)
+
             errG = -self.netD(fake).mean()
 
         self.scalerG.scale(errG).backward()
@@ -232,6 +246,7 @@ def main():
     parser.add_argument('--log_dir', type=str, default='log', help='Save Location')
     parser.add_argument('--device', type=str, default='cuda', help='Torch Device Choice')
     parser.add_argument('--load_params', type=bool, default=False, help='Load Parameters form pickle in log dir')
+    parser.add_argument('--biggan2', type=bool, default=False)
     args = parser.parse_args()
 
 
