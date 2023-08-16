@@ -4,7 +4,7 @@ from unet_parts import *
 
 
 class UNet(nn.Module):
-    def __init__(self, n_channels=3, bilinear=True):
+    def __init__(self, n_channels=4, bilinear=True):
         super(UNet, self).__init__()
         self.n_channels = n_channels
         self.bilinear = bilinear
