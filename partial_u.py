@@ -120,7 +120,7 @@ class PConvUNet(nn.Module):
                               bn=False, activ=None, conv_bias=True)
 
     def forward(self, input):
-        input_mask = input[:,3].unsqueeze(1)
+        input_mask = input[:,3].unsqueeze(1).repeat(1,3,1,1)
         input = input[:,:3]
         h_dict = {}  # for the output of enc_N
         h_mask_dict = {}  # for the output of enc_N
