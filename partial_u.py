@@ -147,10 +147,10 @@ class PConvUNet(nn.Module):
         for i in range(self.layer_size, 0, -1):
             enc_h_key = 'h_{:d}'.format(i - 1)
             dec_l_key = 'dec_{:d}'.format(i)
-
-            h = F.interpolate(h, scale_factor=2, mode=self.upsampling_mode)
+            scale = 1.875 if h_mask.shape[-1] == 96 else 2
+            h = F.interpolate(h, scale_factor=scale, mode=self.upsampling_mode)
             h_mask = F.interpolate(
-                h_mask, scale_factor=2, mode='nearest')
+                h_mask, scale_factor=scale, mode='nearest')
             print(h_mask.shape)
             h = torch.cat([h, h_dict[enc_h_key]], dim=1)
             h_mask = torch.cat([h_mask, h_mask_dict[enc_h_key]], dim=1)
