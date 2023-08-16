@@ -98,7 +98,10 @@ class Trainer(object):
             self.fixed_test_noise = noise.clone()
     
         with torch.no_grad():
-            fake = self.netG(self.fixed_test_noise).detach().cpu()
+            if self.p.biggan2:
+                fake = self.netG(self.fixed_test_noise, self.y).detach().cpu()
+            else:
+                fake = self.netG(self.fixed_test_noise).detach().cpu()
         torchvision.utils.save_image(
             vutils.make_grid(fake, padding=2, normalize=True)
             , os.path.join(self.images_dir, f'{step}.png'))
