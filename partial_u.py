@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torchvision import transforms
 
 def weights_init(init_type='gaussian'):
     def init_fun(m):
@@ -103,7 +104,7 @@ class PConvUNet(nn.Module):
         self.upsampling_mode = upsampling_mode
         self.layer_size = layer_size
         self.enc_1 = PCBActiv(input_channels, 64, bn=False, sample='down-7')
-        self.enc_2 = PCBActiv(64, 128, sample='down-5', keep_div=True)
+        self.enc_2 = PCBActiv(64, 128, sample='down-5')
         self.enc_3 = PCBActiv(128, 256, sample='down-5')
         self.enc_4 = PCBActiv(256, 512, sample='down-3')
         for i in range(4, self.layer_size):
@@ -120,6 +121,7 @@ class PConvUNet(nn.Module):
                               bn=False, activ=None, conv_bias=True)
 
     def forward(self, input):
+        input = F.interpolate(input, size=384)
         input_mask = input[:,3].unsqueeze(1).repeat(1,3,1,1)
         input = input[:,:3]
         h_dict = {}  # for the output of enc_N
@@ -146,12 +148,12 @@ class PConvUNet(nn.Module):
         for i in range(self.layer_size, 0, -1):
             enc_h_key = 'h_{:d}'.format(i - 1)
             dec_l_key = 'dec_{:d}'.format(i)
-            scale = 1.875 if h_mask.shape[-1] == 96 else 2
+            scale = 2
             h = F.interpolate(h, scale_factor=scale, mode=self.upsampling_mode)
             h_mask = F.interpolate(
                 h_mask, scale_factor=scale, mode='nearest')
             h = torch.cat([h, h_dict[enc_h_key]], dim=1)
             h_mask = torch.cat([h_mask, h_mask_dict[enc_h_key]], dim=1)
             h, h_mask = getattr(self, dec_l_key)(h, h_mask)
-
+        h = F.interpolate(h, size=360, mode=self.upsampling_mode)
         return torch.tanh(h)
