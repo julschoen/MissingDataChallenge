@@ -68,7 +68,7 @@ class Trainer(object):
                 y = y/255
                 y = (y*2)-1
                 y = y.permute(0,3,1,2)
-                y = torch.concat((y,z), dim=1)
+                y = torch.concat((y,z.unsqueeze(1)), dim=1)
                 yield x.permute(0,3,1,2), y
         
     def log_train(self, step):
@@ -83,7 +83,7 @@ class Trainer(object):
                 y = y/255
                 y = (y*2)-1
                 y = y.permute(0,3,1,2)
-                y = torch.concat((y,z), dim=1)
+                y = torch.concat((y,z.unsqueeze(1)), dim=1)
                 x, y = x.to(self.p.device).permute(0,3,1,2), y.to(self.p.device)
                 rec = self.unet(y)
                 mses.append(F.mse_loss(y,x).item())
