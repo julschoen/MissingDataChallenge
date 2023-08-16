@@ -160,8 +160,8 @@ class Trainer(object):
             mse_loss = F.mse_loss(rec, im)
             ssim_loss = 1 - ssim(rec+1, im+1, data_range=2)
 
-            losses = self.inpaint_loss(masked[:,:3,:,:], masked[:,3,:,:].unsqueeze(1), rec, im)
-            #loss = torch.tensor(0.0, device=self.p.device)
+            #losses = self.inpaint_loss(masked[:,:3,:,:], masked[:,3,:,:].unsqueeze(1), rec, im)
+            loss = torch.tensor(0.0, device=self.p.device)
             #for key in self.coefs.keys():
             #    loss += self.coefs[key] * losses[key]
 
@@ -169,7 +169,7 @@ class Trainer(object):
             if self.p.only_ssim:
                 loss += ssim_loss
             else:
-                loss = mse_loss + 5*ssim_loss
+                loss += mse_loss + 5*ssim_loss
 
             loss.backward()
             self.opt.step()
