@@ -158,7 +158,7 @@ class Trainer(object):
             mse_loss = F.mse_loss(rec, im)
             ssim_loss = 1 - ssim(rec+1, im+1, data_range=2)
 
-            losses = self.inpaint_loss(masked[:,:3,:,:], masked[:,3,:,:], rec, im)
+            losses = self.inpaint_loss(masked[:,:3,:,:], masked[:,3,:,:].unsqueeze(1), rec, im)
             print(losses)
 
             if self.p.only_ssim:
