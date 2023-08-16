@@ -86,8 +86,8 @@ class Trainer(object):
                 y = torch.concat((y,z.unsqueeze(1)), dim=1)
                 x, y = x.to(self.p.device).permute(0,3,1,2), y.to(self.p.device)
                 rec = self.unet(y)
-                mses.append(F.mse_loss(y,x).item())
-                ssims.append(ssim(y+1,x+1, data_range=2).item())
+                mses.append(F.mse_loss(rec,x).item())
+                ssims.append(ssim(rec+1,x+1, data_range=2).item())
 
         mses = np.mean(mses)
         ssims = np.mean(ssims)
