@@ -43,7 +43,7 @@ class Cats(Dataset):
       ret.append(im)
 
     if self.files_mask:
-      idx = self.mask[index]
+      idx = self.files_mask[index]
       p = os.path.join(self.input_data_dir, "masks", f"{idx}_stroke_mask.png")
       im = io.imread(p)
       im = im.astype(np.float32)
