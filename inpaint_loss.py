@@ -66,10 +66,10 @@ def total_variation_loss(image):
 
 
 class InpaintingLoss(nn.Module):
-    def __init__(self):
+    def __init__(self, device):
         super().__init__()
         self.l1 = nn.L1Loss()
-        self.extractor = VGG16FeatureExtractor()
+        self.extractor = VGG16FeatureExtractor().to(device)
 
     def forward(self, input, mask, output, gt):
         loss_dict = {}
