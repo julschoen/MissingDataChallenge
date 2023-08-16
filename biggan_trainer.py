@@ -59,7 +59,7 @@ class Trainer(object):
             self.netD = nn.DataParallel(self.netD)
             self.netG = nn.DataParallel(self.netG)
 
-        self.optimizerD = optim.Adam(self.netD.parameters(), lr=self.p.lrD, betas=(0., 0.99))9))
+        self.optimizerD = optim.Adam(self.netD.parameters(), lr=self.p.lrD, betas=(0., 0.999))
         self.optimizerG = optim.Adam(self.netG.parameters(), lr=self.p.lrG, betas=(0., 0.999))
 
         self.scalerD = GradScaler()
