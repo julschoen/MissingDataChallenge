@@ -103,7 +103,6 @@ class Trainer(object):
             vutils.make_grid(real, padding=2, normalize=True)
             , os.path.join(self.images_dir, f'target_{step}.png'))
 
-
     def start_from_checkpoint(self):
         step = 0
         checkpoint = os.path.join(self.models_dir, 'checkpoint.pt')
@@ -139,7 +138,6 @@ class Trainer(object):
         self.log_interpolation(step, fake, real)
         self.save_checkpoint(step)
 
-
     def train(self):
         step_done = self.start_from_checkpoint()
 
@@ -160,7 +158,7 @@ class Trainer(object):
             if self.p.only_ssim:
                 loss = ssim_loss
             else:
-                loss = mse_loss + ssim_loss
+                loss = mse_loss + 5*ssim_loss
 
             loss.backward()
             self.opt.step()
