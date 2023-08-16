@@ -9,7 +9,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 from torch.nn import Parameter as P
 
-import layers2
+import layers2 as layers
 from sync_batchnorm2 import SynchronizedBatchNorm2d as SyncBatchNorm2d
 
 # BigGAN-deep: uses a different resblock and pattern
