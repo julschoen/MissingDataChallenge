@@ -72,7 +72,7 @@ class PCBActiv(nn.Module):
                  conv_bias=False, keep_div=False):
         super().__init__()
         if sample == 'down-5':
-            self.conv = PartialConv(in_ch, out_ch, 5, 2, 3 if keep_div else 2, bias=conv_bias)
+            self.conv = PartialConv(in_ch, out_ch, 5, 2, 4 if keep_div else 2, bias=conv_bias)
         elif sample == 'down-7':
             self.conv = PartialConv(in_ch, out_ch, 7, 2, 3, bias=conv_bias)
         elif sample == 'down-3':
