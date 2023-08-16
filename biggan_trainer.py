@@ -50,7 +50,7 @@ class Trainer(object):
         if self.p.biggan2:
             self.netD = D2().to(self.device)
             self.netG = G2(dim_z=self.p.z_size).to(self.device)
-            self.y = torch.zeros(self.p.batch_size, device=self.p.device)
+            self.y = torch.zeros(self.p.batch_size, device=self.p.device).reshape(self.p.batch_size, 1)
         else:
             self.netD = Discriminator().to(self.device)
             self.netG = Generator(dim_z=self.p.z_size).to(self.device)
