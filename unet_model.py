@@ -100,7 +100,7 @@ class downStep(nn.Module):
         super(downStep, self).__init__()
         # todo
         self.firstLayer = firstLayer
-        padding = 0 if keep_div else 1
+        padding = 2 if keep_div else 1
         self.conv = nn.Sequential(
             nn.Conv2d(inC, outC, 3, padding=padding),
             nn.ReLU(),
