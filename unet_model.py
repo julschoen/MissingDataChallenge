@@ -71,27 +71,17 @@ class UNet2(nn.Module):
     def forward(self, x):
         # todo
         x1 = self.downStep1(x)
-        print('x1', x1.shape)
         x2 = self.downStep2(x1)
-        print('x2', x2.shape)
         x3 = self.downStep3(x2)
-        print('x3', x3.shape)
         x4 = self.downStep4(x3)
-        print('x4', x4.shape)
         x5 = self.downStep5(x4) 
-        print('x5', x5.shape)
 
         x = self.upStep1(x5, x4)
-        print(x.shape)
         x = self.upStep2(x, x3)
-        print(x.shape)
         x = self.upStep3(x, x2)
-        print(x.shape)
         x = self.upStep4(x, x1)
-        print(x.shape)
 
         x = self.conv(x)
-        print(x.shape)
         x = torch.tanh(x)
         return x
 
