@@ -134,7 +134,7 @@ class PConvUNet(nn.Module):
             h_dict[h_key], h_mask_dict[h_key] = getattr(self, l_key)(
                 h_dict[h_key_prev], h_mask_dict[h_key_prev])
             h_key_prev = h_key
-            print(h_mask_dict[h_key])
+            print(h_mask_dict[h_key].shape)
 
         h_key = 'h_{:d}'.format(self.layer_size)
         h, h_mask = h_dict[h_key], h_mask_dict[h_key]
