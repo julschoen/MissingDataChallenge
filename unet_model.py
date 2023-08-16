@@ -61,8 +61,8 @@ class UNet2(nn.Module):
         self.downStep4 = downStep(256, 512, keep_div=True)
         self.downStep5 = downStep(512, 1024)
         
-        self.upStep1 = upStep(1024, 512, keep_div=True)
-        self.upStep2 = upStep(512, 256)
+        self.upStep1 = upStep(1024, 512)
+        self.upStep2 = upStep(512, 256, keep_div=True)
         self.upStep3 = upStep(256, 128)
         self.upStep4 = upStep(128, 64)
 
@@ -121,14 +121,14 @@ class downStep(nn.Module):
 class upStep(nn.Module):
     def __init__(self, inC, outC, keep_div=False):
         super(upStep, self).__init__()
-        kernel = 2 if keep_div else 3
+        
         self.conv = nn.Sequential(
-            nn.Conv2d(inC, outC, kernel, padding=1),
+            nn.Conv2d(inC, outC, 3, padding=1),
             nn.ReLU(),
             nn.Conv2d(outC, outC, 3, padding=1),
             nn.ReLU())
-
-        self.upsampling = nn.ConvTranspose2d(inC, outC, 2, 2)
+        kernel = 2 if keep_div else 3
+        self.upsampling = nn.ConvTranspose2d(inC, outC, 2, 1 if keep_div else 2)
 
     def forward(self, x, x_down):
         # todo
