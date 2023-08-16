@@ -79,7 +79,7 @@ class Generator(nn.Module):
   def __init__(self, G_ch=64, G_depth=2, dim_z=128, bottom_width=6, resolution=360,
                G_kernel_size=3, G_attn='64', n_classes=1,
                num_G_SVs=1, num_G_SV_itrs=1,
-               G_shared=True, shared_dim=0, hier=True,
+               G_shared=True, shared_dim=1, hier=True,
                cross_replica=False, mybn=False,
                G_activation=nn.ReLU(inplace=False),
                BN_eps=1e-5, SN_eps=1e-12, G_mixed_precision=False, G_fp16=False,
