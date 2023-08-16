@@ -21,6 +21,7 @@ import torch.nn.functional as F
 from unet_model import UNet, UNet2
 from dataset import Cats
 from inpaint_tools import read_file_list
+from inpaint_loss import InpaintingLoss
 
 
 class Trainer(object):
@@ -56,6 +57,8 @@ class Trainer(object):
         ### Make Data Generator ###
         self.generator_train = DataLoader(dataset_train, batch_size=self.p.batch_size, shuffle=True, num_workers=4, drop_last=True)
         self.generator_val = DataLoader(dataset_val, batch_size=self.p.batch_size, shuffle=True, num_workers=4, drop_last=False)
+
+        self.inpaint_loss = InpaintingLoss()
 
         ### Prep Training
         self.losses = []
@@ -154,6 +157,9 @@ class Trainer(object):
             rec = self.unet(masked)
             mse_loss = F.mse_loss(rec, im)
             ssim_loss = 1 - ssim(rec+1, im+1, data_range=2)
+
+            losses = self.inpaint_loss(masked[:,:3,:,:], masked[:,3,:,:], rec, im)
+            print(losses)
 
             if self.p.only_ssim:
                 loss = ssim_loss
