@@ -58,7 +58,7 @@ class Trainer(object):
         self.generator_train = DataLoader(dataset_train, batch_size=self.p.batch_size, shuffle=True, num_workers=4, drop_last=True)
         self.generator_val = DataLoader(dataset_val, batch_size=self.p.batch_size, shuffle=True, num_workers=4, drop_last=False)
 
-        self.inpaint_loss = InpaintingLoss()
+        self.inpaint_loss = InpaintingLoss(device=self.p.device)
 
         ### Prep Training
         self.losses = []
