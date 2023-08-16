@@ -72,7 +72,7 @@ class PCBActiv(nn.Module):
                  conv_bias=False, keep_div=False):
         super().__init__()
         if sample == 'down-5':
-            self.conv = PartialConv(in_ch, out_ch, 5, 2, 8 if keep_div else 2, bias=conv_bias)
+            self.conv = PartialConv(in_ch, out_ch, 5, 1, 4 if keep_div else 2, bias=conv_bias)
         elif sample == 'down-7':
             self.conv = PartialConv(in_ch, out_ch, 7, 2, 3, bias=conv_bias)
         elif sample == 'down-3':
@@ -151,7 +151,6 @@ class PConvUNet(nn.Module):
             h = F.interpolate(h, scale_factor=scale, mode=self.upsampling_mode)
             h_mask = F.interpolate(
                 h_mask, scale_factor=scale, mode='nearest')
-            print(h_mask.shape)
             h = torch.cat([h, h_dict[enc_h_key]], dim=1)
             h_mask = torch.cat([h_mask, h_mask_dict[enc_h_key]], dim=1)
             h, h_mask = getattr(self, dec_l_key)(h, h_mask)
