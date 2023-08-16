@@ -61,8 +61,8 @@ class UNet2(nn.Module):
         self.downStep4 = downStep(256, 512, keep_div=True)
         self.downStep5 = downStep(512, 1024)
         
-        self.upStep1 = upStep(1024, 512)
-        self.upStep2 = upStep(512, 256, keep_div=True)
+        self.upStep1 = upStep(1024, 512, keep_div=True)
+        self.upStep2 = upStep(512, 256)
         self.upStep3 = upStep(256, 128)
         self.upStep4 = upStep(128, 64)
 
