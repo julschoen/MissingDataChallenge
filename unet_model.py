@@ -52,7 +52,7 @@ import torch.nn.functional as F
 
 class UNet2(nn.Module):
     def __init__(self):
-        super(UNet, self).__init__()
+        super(UNet2, self).__init__()
         # todo
         # Hint: Do not use ReLU in last convolutional set of up-path (128-64-64) for stability reasons!
         self.downStep1 = downStep(4, 64, firstLayer=True)
@@ -93,7 +93,6 @@ class UNet2(nn.Module):
         x = self.conv(x)
         # print(x.shape)
         x = self.tanh(x)
-
         return x
 
 class downStep(nn.Module):
