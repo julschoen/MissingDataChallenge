@@ -128,8 +128,8 @@ class upStep(nn.Module):
             nn.Conv2d(outC, outC, 3, padding=1),
             nn.ReLU())
         kernel = 1 if keep_div else 2
-        pad = 1 if keep_div else 2
-        self.upsampling = nn.ConvTranspose2d(inC, outC, kernel, pad)
+        pad = 2 if keep_div else 1
+        self.upsampling = nn.ConvTranspose2d(inC, outC, kernel, stride=2, padding=pad)
 
     def forward(self, x, x_down):
         # todo
