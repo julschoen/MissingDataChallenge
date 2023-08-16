@@ -58,18 +58,18 @@ class UNet2(nn.Module):
         self.downStep1 = downStep(4, 64, firstLayer=True)
         self.downStep2 = downStep(64, 128)
         self.downStep3 = downStep(128, 256)
-        self.downStep4 = downStep(256, 512, keep_div=True)
+        self.downStep4 = downStep(256, 512)
         self.downStep5 = downStep(512, 1024)
         
         self.upStep1 = upStep(1024, 512)
-        self.upStep2 = upStep(512, 256, keep_div=True)
+        self.upStep2 = upStep(512, 256)
         self.upStep3 = upStep(256, 128)
         self.upStep4 = upStep(128, 64)
 
         self.conv = nn.Conv2d(64, 3, 1)
 
     def forward(self, x):
-        # todo
+        x = F.interpolate(x, size=386)
         x1 = self.downStep1(x)
         x2 = self.downStep2(x1)
         x3 = self.downStep3(x2)
@@ -82,6 +82,7 @@ class UNet2(nn.Module):
         x = self.upStep4(x, x1)
 
         x = self.conv(x)
+        x = F.interpolate(x, size=360)
         x = torch.tanh(x)
         return x
 
