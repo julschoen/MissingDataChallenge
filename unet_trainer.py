@@ -63,6 +63,10 @@ class Trainer(object):
     def inf_train_gen(self):
         while True:
             for x,y in self.generator_train:
+                x = x/255
+                x = (x*2)-1
+                y = y/255
+                y = (y*2)-1
                 yield x.permute(0,3,1,2), y.permute(0,3,1,2)
         
     def log_train(self, step):

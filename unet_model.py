@@ -92,7 +92,7 @@ class UNet2(nn.Module):
 
         x = self.conv(x)
         # print(x.shape)
-        #x = self.sigmoid(x)
+        x = self.tanh(x)
 
         return x
 
