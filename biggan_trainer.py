@@ -52,8 +52,8 @@ class Trainer(object):
             self.netD = nn.DataParallel(self.netD)
             self.netG = nn.DataParallel(self.netG)
 
-        self.optimizerD = optim.Adam(self.netD.parameters(), lr=self.p.lrD, betas=(0., 0.9))
-        self.optimizerG = optim.Adam(self.netG.parameters(), lr=self.p.lrG, betas=(0., 0.9))
+        self.optimizerD = optim.Adam(self.netD.parameters(), lr=self.p.lrD, betas=(0., 0.999))
+        self.optimizerG = optim.Adam(self.netG.parameters(), lr=self.p.lrG, betas=(0., 0.999))
 
         self.scalerD = GradScaler()
         self.scalerG = GradScaler()
@@ -225,7 +225,7 @@ def main():
     parser.add_argument('--z_size', type=int, default=512, help='Latent space dimension')
     parser.add_argument('--iterD', type=int, default=2, help='Number of D iters per iter')
     parser.add_argument('--lrG', type=float, default=5e-5, help='Learning rate G')
-    parser.add_argument('--lrD', type=float, default=1e-4, help='Learning rate D')
+    parser.add_argument('--lrD', type=float, default=5e-5, help='Learning rate D')
     parser.add_argument('--ngpu', type=int, default=1, help='Number of GPUs')
     parser.add_argument('--steps_per_log', type=int, default=10, help='Output Iterations')
     parser.add_argument('--steps_per_img_log', type=int, default=50, help='Image Save Iterations')
