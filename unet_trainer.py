@@ -18,7 +18,7 @@ import torchvision
 import torchvision.utils as vutils
 import torch.nn.functional as F
 
-from unet_model import UNet
+from unet_model import UNet, UNet2
 from dataset import Cats
 from inpaint_tools import read_file_list
 
