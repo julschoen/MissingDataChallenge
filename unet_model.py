@@ -123,7 +123,7 @@ class upStep(nn.Module):
         super(upStep, self).__init__()
         kernel = 2 if keep_div else 3
         self.conv = nn.Sequential(
-            nn.Conv2d(inC, outC, kernel, padding=padding),
+            nn.Conv2d(inC, outC, kernel, padding=1),
             nn.ReLU(),
             nn.Conv2d(outC, outC, 3, padding=1),
             nn.ReLU())
