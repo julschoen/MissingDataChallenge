@@ -163,13 +163,8 @@ class Trainer(object):
             else:
                 fake = self.netG(noise)
 
-            if self.p.biggan2:
-                errD_real = (nn.ReLU()(1.0 - self.netD(real, self.y))).mean()
-                errD_fake = (nn.ReLU()(1.0 + self.netD(fake, self.y))).mean()
-            else:
-                errD_real = (nn.ReLU()(1.0 - self.netD(real))).mean()
-                errD_fake = (nn.ReLU()(1.0 + self.netD(fake))).mean()
-                
+            errD_real = (nn.ReLU()(1.0 - self.netD(real))).mean()
+            errD_fake = (nn.ReLU()(1.0 + self.netD(fake))).mean()
             errD = errD_fake + errD_real
 
         self.scalerD.scale(errD).backward()
@@ -194,10 +189,7 @@ class Trainer(object):
             else:
                 fake = self.netG(noise)
 
-            if self.p.biggan2:
-                errG = -self.netD(fake, self.y).mean()
-            else:
-                errG = -self.netD(fake).mean()
+            errG = -self.netD(fake).mean()
 
         self.scalerG.scale(errG).backward()
         self.scalerG.step(self.optimizerG)
