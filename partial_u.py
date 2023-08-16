@@ -69,10 +69,10 @@ class PartialConv(nn.Module):
 
 class PCBActiv(nn.Module):
     def __init__(self, in_ch, out_ch, bn=True, sample='none-3', activ='relu',
-                 conv_bias=False):
+                 conv_bias=False, keep_div=False):
         super().__init__()
         if sample == 'down-5':
-            self.conv = PartialConv(in_ch, out_ch, 5, 2, 2, bias=conv_bias)
+            self.conv = PartialConv(in_ch, out_ch, 5, 2, 1 if keep_div else 2, bias=conv_bias)
         elif sample == 'down-7':
             self.conv = PartialConv(in_ch, out_ch, 7, 2, 3, bias=conv_bias)
         elif sample == 'down-3':
@@ -103,7 +103,7 @@ class PConvUNet(nn.Module):
         self.upsampling_mode = upsampling_mode
         self.layer_size = layer_size
         self.enc_1 = PCBActiv(input_channels, 64, bn=False, sample='down-7')
-        self.enc_2 = PCBActiv(64, 128, sample='down-5')
+        self.enc_2 = PCBActiv(64, 128, sample='down-5', keep_div=True)
         self.enc_3 = PCBActiv(128, 256, sample='down-5')
         self.enc_4 = PCBActiv(256, 512, sample='down-3')
         for i in range(4, self.layer_size):
