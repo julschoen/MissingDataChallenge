@@ -5,7 +5,7 @@ import pickle
 import os
 import copy
 import argparse
-from pytorch_msssim import ssim
+from pytorch_msssim import ssim, ms_ssim
 
 import torch 
 import torch.optim as optim
@@ -59,7 +59,7 @@ class Trainer(object):
         self.generator_train = DataLoader(dataset_train, batch_size=self.p.batch_size, shuffle=True, num_workers=4, drop_last=True)
         self.generator_val = DataLoader(dataset_val, batch_size=self.p.batch_size, shuffle=True, num_workers=4, drop_last=False)
 
-        self.inpaint_loss = InpaintingLoss(device=self.p.device)
+        #self.inpaint_loss = InpaintingLoss(device=self.p.device)
         self.coefs = {'valid': 1.0, 'hole': 1.0, 'tv': 0.1, 'prc': 0.05, 'style': 1.0}
 
         ### Prep Training
@@ -81,6 +81,7 @@ class Trainer(object):
 
         mses = []
         ssims = []
+        ms_ssims = []
         with torch.no_grad():
             for x,y,z in self.generator_val:
                 x = x/255
@@ -93,11 +94,14 @@ class Trainer(object):
                 rec = self.unet(y)
                 mses.append(F.mse_loss(rec,x).item())
                 ssims.append(ssim(rec+1,x+1, data_range=2).item())
+                ms_ssims.append(ms_ssim(rec+1,x+1, data_range=2).item())
+
 
         mses = np.mean(mses)
         ssims = np.mean(ssims)
+        ms_ssims = np.mean(ms_ssims)
 
-        print('[%d|%d] MSE: %.4f SSIM: %.4f\tVal MSE: %.4f SSIM: %.4f' % (step, self.p.niters, l1, l2, mses,ssims), flush=True)
+        print('[%d|%d] MSE: %.4f SSIM: %.4f\tVal MSE: %.4f SSIM: %.4f MS-SSIM: %.4f' % (step, self.p.niters, l1, l2, mses,ssims, ms_ssims), flush=True)
 
     def log_interpolation(self, step, fake, real):
         torchvision.utils.save_image(
@@ -158,9 +162,9 @@ class Trainer(object):
 
             rec = self.unet(masked)
             mse_loss = F.mse_loss(rec, im)
-            ssim_loss = 1 - ssim(rec+1, im+1, data_range=2)
+            ssim_loss = (1 - ssim(rec+1, im+1, data_range=2)) + (1 - ms_ssim(rec+1, im+1, data_range=2))
 
-            losses = self.inpaint_loss(masked[:,:3,:,:], masked[:,3,:,:].unsqueeze(1), rec, im)
+            #losses = self.inpaint_loss(masked[:,:3,:,:], masked[:,3,:,:].unsqueeze(1), rec, im)
             loss = torch.tensor(0.0, device=self.p.device)
             for key in self.coefs.keys():
                 loss += self.coefs[key] * losses[key]
@@ -174,7 +178,6 @@ class Trainer(object):
             loss.backward()
             self.opt.step()
 
-            if i%10==0: print(loss.detach().item())
             self.losses.append((mse_loss.detach().item(), ssim_loss.detach().item()))
             self.log(i, rec, im)
             if i%100 == 0 and i>0:
