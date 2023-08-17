@@ -6,6 +6,7 @@ import os
 import copy
 import argparse
 import pathlib
+from skimage import io
 
 import torch 
 import torch.optim as optim
