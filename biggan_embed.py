@@ -91,7 +91,7 @@ class Trainer(object):
         z = torch.randn((ims.shape[0], self.p.z_size), device=self.p.device)
         z = torch.nn.Parameter(z, requires_grad=True)
         opt_ims = torch.optim.SGD([z], lr=self.p.lr, momentum=0.5)
-
+        mask = mask/255
         mask = (mask -1)*-1
 
         for i in range(self.p.niters):
