@@ -18,7 +18,7 @@ import torchvision
 import torchvision.utils as vutils
 import torch.nn.functional as F
 
-from unet_model import UNet, UNet2
+from unet_model import UNet
 from partial_u import PConvUNet
 from dataset import Cats
 from inpaint_tools import read_file_list
@@ -49,7 +49,7 @@ class Trainer(object):
         self.p = params
 
         ### Make Models ###
-        self.unet = UNet2().to(self.p.device)
+        self.unet = UNet().to(self.p.device)
 
         self.opt = optim.Adam(self.unet.parameters(), lr=self.p.lr, betas=(0., 0.9))
 
