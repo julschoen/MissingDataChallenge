@@ -31,7 +31,7 @@ class Params(object):
         self.niters=5000
         self.batch_size=16
         self.z_size=128
-        self.lr=1e-3
+        self.lr=1
         self.device='cuda'
         self.biggan2=True
         self.full=True
@@ -94,6 +94,7 @@ class Trainer(object):
         mask = (mask -1)*-1
 
         for i in range(self.p.niters):
+            opt_ims.zero_grad()
             with autocast():
                 if self.p.biggan2:
                     fake = self.netG(z, self.y)
