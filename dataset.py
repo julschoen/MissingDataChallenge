@@ -52,11 +52,11 @@ class Cats(Dataset):
       ret.append(im)
 
     if len(ret) == 1:
-      return ret[0], idx if self.file else ret[0]
+      return (ret[0], idx) if self.file else ret[0]
     if len(ret) == 2:
-      return ret[0], ret[1], idx if self.file else ret[0], ret[1]
+      return (ret[0], ret[1], idx) if self.file else (ret[0], ret[1])
     if len(ret) == 3:
-      return ret[0], ret[1], ret[2], idx if self.file else ret[0], ret[1], ret[2]
+      return (ret[0], ret[1], ret[2], idx) if self.file else (ret[0], ret[1], ret[2])
 
     return ret
 
