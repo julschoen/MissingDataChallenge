@@ -3,12 +3,12 @@
 		"name": "PurrfectPixel"
 	},
 	"training_parms": {
-		"method": "BigCAT",
+		"method": "Garfield v2",
 		"dummy_value": 1000
 	},
 	"dirs": {
 		"input_data_dir": "./MissingDataOpenData/",
-		"output_data_dir": "./biggan_out_full/"
+		"output_data_dir": "./unet_l1/"
 	},
 	"challenge_server": {
 		"address": "http://fungi.compute.dtu.dk:8080"
