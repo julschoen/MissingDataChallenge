@@ -119,7 +119,9 @@ class Trainer(object):
             p.requires_grad = False
 
         print("Starting Training...", flush=True)
-        for ims, mask, name in self.generator_train:
+        for i, x in enumerate(self.generator_train):
+            print(x)
+            ims, mask names = x
             self.G_batch(ims, mask, names)
         print('...Done', flush=True)
 
