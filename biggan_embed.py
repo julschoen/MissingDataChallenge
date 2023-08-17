@@ -127,6 +127,8 @@ class Trainer(object):
         print("Starting Training...", flush=True)
         for i, x in enumerate(self.generator_train):
             ims, mask, names = x
+            ims = ims/255
+            ims = (ims*2)-1
             ims = ims.permute(0,3,1,2).to(self.p.device)
             mask = mask.unsqueeze(1).to(self.p.device)
             self.G_batch(ims, mask, names)
