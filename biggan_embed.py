@@ -120,7 +120,6 @@ class Trainer(object):
 
         print("Starting Training...", flush=True)
         for i, x in enumerate(self.generator_train):
-            print(x)
             ims, mask, names = x
             self.G_batch(ims, mask, names)
         print('...Done', flush=True)
