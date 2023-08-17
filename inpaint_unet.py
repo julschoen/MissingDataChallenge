@@ -34,7 +34,7 @@ def inpaint_images(settings):
     model_dir = os.path.join(output_data_dir, "trained_model")
 
     model = UNet2().cuda()
-    checkpoint = os.path.join("unet_msssim", "models", 'checkpoint.pt')
+    checkpoint = os.path.join("unet_l1", "models", 'checkpoint.pt')
     state_dict = torch.load(checkpoint)
     model.load_state_dict(state_dict['model'])
 
