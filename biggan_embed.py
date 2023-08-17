@@ -44,21 +44,6 @@ class Trainer(object):
         self.device = params.device
 
         ### Make Dirs ###
-        self.log_dir = params.log_dir
-        os.makedirs(self.log_dir, exist_ok=True)
-        self.models_dir = os.path.join(self.log_dir, 'models')
-        self.images_dir = os.path.join(self.log_dir, 'images')
-        os.makedirs(self.models_dir, exist_ok=True)
-        os.makedirs(self.images_dir, exist_ok=True)
-
-        ### load/save params
-        if params.load_params:
-            with open(os.path.join(params.log_dir, 'params.pkl'), 'rb') as file:
-                params = pickle.load(file)
-        else:
-            with open(os.path.join(params.log_dir,'params.pkl'), 'wb') as file:
-                pickle.dump(params, file)
-
         self.p = params
 
         ### Make Models ###
