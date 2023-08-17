@@ -22,9 +22,6 @@ def inpaint_one_image(model, in_image, mask):
 
     in_image = in_image[:3]
     mask = mask/255
-    print(mask)
-    print(rec.max(), rec.min())
-    print(in_image.max(), in_image.min())
     rec = rec*mask + in_image
     rec = rec.detach().cpu().permute(1,2,0).numpy()
     rec = (rec+1)/2
