@@ -10,10 +10,13 @@ from unet_model import UNet, UNet2
 import torch
 
 
-def inpaint_one_image(model, in_image):
+def inpaint_one_image(model, in_image, mask):
     in_image = in_image.astype(np.float32)/255
     in_image = (in_image*2)-1
+    mask = mask.astype(np.float32)
     in_image = torch.from_numpy(in_image).float().cuda().permute(2,0,1)
+    mask = torch.from_numpy(mask).float().cuda().unsqueeze(1)
+    in_image = torch.concat((in_image, mask), dim=1)
     with torch.no_grad():
         rec = model(in_image.unsqueeze(0)).squeeze()
     rec = rec.detach().cpu().permute(1,2,0).numpy()
@@ -51,11 +54,13 @@ def inpaint_images(settings):
 
     for idx in tqdm(file_ids):
         in_image_name = os.path.join(input_data_dir, "masked", f"{idx}_stroke_masked.png")
+        in_mask_name = os.path.join(input_data_dir, "masks", f"{idx}_stroke_mask.png")
         out_image_name = os.path.join(inpainted_result_dir, f"{idx}.png")
 
         im_masked = io.imread(in_image_name)
+        mask = io.imread(in_mask_name)
 
-        inpainted_image = inpaint_one_image(model, im_masked)
+        inpainted_image = inpaint_one_image(model, im_masked, mask)
         io.imsave(out_image_name, inpainted_image)
 
 
