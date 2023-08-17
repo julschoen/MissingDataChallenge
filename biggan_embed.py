@@ -22,6 +22,8 @@ from BigGANdeep2 import Discriminator as D2
 from BigGANdeep2 import Generator as G2
 from dataset import Cats
 from inpaint_tools import read_file_list
+from inpaint_config import InPaintConfig
+from inpaint_tools import read_file_list
 
 class Params(object):
     def __init__(self):
