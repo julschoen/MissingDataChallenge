@@ -108,7 +108,7 @@ class Trainer(object):
 
                 if self.p.full:
                     fake[torch.where(mask == 1)] = 0.0
-                    loss = 1- ssim((fake+1, ims+1, data_range=2))
+                    loss = 1- ssim(fake+1, ims+1, data_range=2))
                 else:
                     fake[torch.where(mask == 0)] = 0
                     loss = 1- ssim(fake+ims+1, ims+1, data_range=2)
