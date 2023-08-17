@@ -3,7 +3,7 @@
 		"name": "PurrfectPixel"
 	},
 	"training_parms": {
-		"method": "Garfield v2",
+		"method": "Garfield v2 Masked",
 		"dummy_value": 1000
 	},
 	"dirs": {

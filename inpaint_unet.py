@@ -19,10 +19,15 @@ def inpaint_one_image(model, in_image, mask):
     in_image = torch.concat((in_image, mask), dim=0)
     with torch.no_grad():
         rec = model(in_image.unsqueeze(0)).squeeze()
+
+    in_image = in_image[:3]
+    rec = rec*mask + in_image
     rec = rec.detach().cpu().permute(1,2,0).numpy()
     rec = (rec+1)/2
     rec = rec*255
     rec = rec.astype(np.uint8)
+
+
 
     return rec
 
