@@ -32,10 +32,10 @@ class Params(object):
         self.niters=5000
         self.batch_size=16
         self.z_size=128
-        self.lr=1e-1
+        self.lr=1e-2
         self.device='cuda'
         self.biggan2=True
-        self.full=False
+        self.full=True
         self.models_dir='./big2/models/'
 
 
@@ -103,8 +103,8 @@ class Trainer(object):
                     fake = self.netG(z)
 
                 if self.p.full:
-                    fake = fake * ((mask-1)*-1)
-                    loss = 1- ssim(fake+1, ims+1, data_range=2)
+                    fake_ = fake * ((mask-1)*-1)
+                    loss = 1- ssim(fake_+1, ims+1, data_range=2)
                 else:
                     fake = (fake * mask)+ims
                     loss = 1- ms_ssim(fake+1, ims+1, data_range=2)
@@ -116,7 +116,7 @@ class Trainer(object):
             self.scaler.step(opt_ims)
             self.scaler.update()
 
-        self.log(fake, names)
+        self.log((fake * mask)+ims, names)
 
 
     def train(self):
