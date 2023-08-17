@@ -22,7 +22,7 @@ def inpaint_one_image(model, in_image, mask):
 
     in_image = in_image[:3]
     mask = mask/255
-    rec = rec*mask + in_image
+    rec[torch.where(mask == 0)] = in_image[torch.where(mask == 0)] 
     rec = rec.detach().cpu().permute(1,2,0).numpy()
     rec = (rec+1)/2
     rec = rec*255
