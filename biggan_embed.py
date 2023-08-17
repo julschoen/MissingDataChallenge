@@ -146,7 +146,7 @@ def main():
     file_ids = read_file_list(file_list)
     dataset_train = Cats(path="./MissingDataOpenData/", files_orig=file_ids, file=True)
 
-    trainer = Trainer(dataset_train, params=config)
+    trainer = Trainer(dataset_train, config)
     trainer.train()
 
 if __name__ == '__main__':
