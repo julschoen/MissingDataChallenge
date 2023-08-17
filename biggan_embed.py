@@ -99,7 +99,7 @@ class Trainer(object):
 
         mask = (mask -1)*-1
 
-        for i in range(self.p.niter):
+        for i in range(self.p.niters):
             with autocast():
                 if self.p.biggan2:
                     fake = self.netG(z, self.y)
@@ -112,6 +112,9 @@ class Trainer(object):
                 else:
                     fake[torch.where(mask == 0)] = 0
                     loss = 1- ssim(fake+ims+1, ims+1, data_range=2)
+
+            if i%100 == 0:
+                print('[%d|%d] Loss: %.4f' % (step, self.p.niters, loss.detach().item()), flush=True)
 
             self.scalerG.scale(loss).backward()
             self.scalerG.step(opt_ims)
