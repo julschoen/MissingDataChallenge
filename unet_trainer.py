@@ -161,7 +161,7 @@ class Trainer(object):
             masked = masked.to(self.p.device)
 
             rec = self.unet(masked)
-            mse_loss = F.mse_loss(rec, im)
+            mse_loss = F.l1_loss(rec, im)
             ssim_loss = (1 - ssim(rec+1, im+1, data_range=2)) + (1 - ms_ssim(rec+1, im+1, data_range=2))
 
             #losses = self.inpaint_loss(masked[:,:3,:,:], masked[:,3,:,:].unsqueeze(1), rec, im)
