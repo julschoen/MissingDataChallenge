@@ -166,10 +166,6 @@ class Trainer(object):
 
             #losses = self.inpaint_loss(masked[:,:3,:,:], masked[:,3,:,:].unsqueeze(1), rec, im)
             loss = torch.tensor(0.0, device=self.p.device)
-            for key in self.coefs.keys():
-                loss += self.coefs[key] * losses[key]
-
-
             if self.p.only_ssim:
                 loss += ssim_loss
             else:
