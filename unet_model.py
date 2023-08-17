@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 class UNet(nn.Module):
     def __init__(self):
-        super(UNet2, self).__init__()
+        super(UNet, self).__init__()
         # todo
         # Hint: Do not use ReLU in last convolutional set of up-path (128-64-64) for stability reasons!
         self.downStep1 = downStep(4, 64, firstLayer=True)
