@@ -202,8 +202,8 @@ def main():
 
     file_list = os.path.join("./MissingDataOpenData/", "data_splits", "training.txt")
     file_ids = read_file_list(file_list)
-    dataset_train = Cats(path="./MissingDataOpenData/", files_orig=file_ids[:4200], files_masked=file_ids[:4200], files_mask=file_ids[:4200])
-    dataset_val = Cats(path="./MissingDataOpenData/", files_orig=file_ids[4200:], files_masked=file_ids[4200:], files_mask=file_ids[4200:])
+    dataset_train = Cats(path="./MissingDataOpenData/", files_orig=file_ids[:4800], files_masked=file_ids[:4800], files_mask=file_ids[:4800])
+    dataset_val = Cats(path="./MissingDataOpenData/", files_orig=file_ids[4800:], files_masked=file_ids[4800:], files_mask=file_ids[4800:])
 
     trainer = Trainer(dataset_train, dataset_val, params=args)
     trainer.train()
