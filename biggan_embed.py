@@ -35,6 +35,7 @@ class Params(object):
         self.device='cuda'
         self.biggan2=True
         self.full=True
+        self.models_dir='./big2/models/'
 
 
 class Trainer(object):
@@ -76,7 +77,7 @@ class Trainer(object):
             io.imsave(out_image_name, im)
     
     def load_gen(self):
-        checkpoint = os.path.join(self.models_dir, 'checkpoint.pt')
+        checkpoint = os.path.join(self.p.models_dir, 'checkpoint.pt')
         
         state_dict = torch.load(checkpoint)
         self.netG.load_state_dict(state_dict['modelG_state_dict'])
@@ -110,7 +111,6 @@ class Trainer(object):
             self.scalerG.update()
 
         self.log(fake, names)
-
 
 
     def train(self):
