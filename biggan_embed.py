@@ -71,6 +71,10 @@ class Trainer(object):
         self.generator_train = DataLoader(dataset, batch_size=self.p.batch_size, shuffle=True, num_workers=4, drop_last=True)
 
     def log(self, ims, names):
+        ims = ims.permute(0,2,3,1).detach().cpu().numpy()
+        ims = (ims+1)/2
+        ims = ims*255
+        ims = ims.astype(np.uint8)
         for i, idx in enumerate(names):
             im = ims[i]
             out_image_name = os.path.join(self.inpainted_result_dir, f"{idx}.png")
@@ -121,6 +125,8 @@ class Trainer(object):
         print("Starting Training...", flush=True)
         for i, x in enumerate(self.generator_train):
             ims, mask, names = x
+            ims = ims.permute(0,3,1,2).to(self.p.device)
+            mask = mask.unsqueeze(1).to(self.p.device)
             self.G_batch(ims, mask, names)
         print('...Done', flush=True)
 
