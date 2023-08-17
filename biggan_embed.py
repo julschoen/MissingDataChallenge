@@ -32,7 +32,7 @@ class Params(object):
         self.niters=5000
         self.batch_size=16
         self.z_size=128
-        self.lr=2e-3
+        self.lr=1e-3
         self.device='cuda'
         self.biggan2=True
         self.full=False
@@ -106,8 +106,8 @@ class Trainer(object):
                     fake = fake * ((mask-1)*-1)
                     loss = 1- ssim(fake+1, ims+1, data_range=2)
                 else:
-                    fake = fake * mask
-                    loss = 1- ssim(fake+ims+1, ims+1, data_range=2)
+                    fake = (fake * mask)+ims
+                    loss = 1- ms_ssim(fake+1, ims+1, data_range=2)
 
             if i%100 == 0:
                 print('[%d|%d] Loss: %.4f' % (i, self.p.niters, loss.detach().item()), flush=True)
