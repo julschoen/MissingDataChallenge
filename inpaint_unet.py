@@ -6,7 +6,7 @@ import numpy as np
 from inpaint_config import InPaintConfig
 from inpaint_tools import read_file_list
 from tqdm import tqdm
-from unet_model import UNet
+from unet_model import UNet, UNet2
 import torch
 
 
@@ -30,7 +30,7 @@ def inpaint_images(settings):
     data_set = settings["data_set"]
     model_dir = os.path.join(output_data_dir, "trained_model")
 
-    model = UNet().cuda()
+    model = UNet2().cuda()
     checkpoint = os.path.join("unet_l1", "models", 'checkpoint.pt')
     state_dict = torch.load(checkpoint)
     model.load_state_dict(state_dict['model'])
