@@ -37,10 +37,10 @@ class Params(object):
 
 
 class Trainer(object):
-    def __init__(self, dataset, config):
+    def __init__(self, dataset, settings):
         ### Misc ###
         params = Params()
-        self.config = config
+        self.config = settings
         self.device = params.device
 
         ### Make Dirs ###
