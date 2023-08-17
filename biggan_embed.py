@@ -119,7 +119,7 @@ class Trainer(object):
             p.requires_grad = False
 
         print("Starting Training...", flush=True)
-        for ims, mask, name in self.dataset_train:
+        for ims, mask, name in self.generator_train:
             self.G_batch(ims, mask, names)
         print('...Done', flush=True)
 
