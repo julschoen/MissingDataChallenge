@@ -5,7 +5,7 @@ from torch.utils.data.dataset import Dataset
 import os
 
 class Cats(Dataset):
-  def __init__(self, path, files_orig=None, files_masked=None, files_mask=None):
+  def __init__(self, path, files_orig=None, files_masked=None, files_mask=None, file=False):
     self.files_masked = files_masked
     self.files_mask = files_mask
     self.files_orig = files_orig
@@ -19,6 +19,7 @@ class Cats(Dataset):
     if self.files_masked:
       self.len = len(self.files_masked)
     self.input_data_dir = path
+    self.file = file
 
   def __getitem__(self, index):
     ret = []
@@ -51,11 +52,11 @@ class Cats(Dataset):
       ret.append(im)
 
     if len(ret) == 1:
-      return ret[0]
+      return ret[0], idx if self.file else ret[0]
     if len(ret) == 2:
-      return ret[0], ret[1]
+      return ret[0], ret[1], idx if self.file else ret[0], ret[1]
     if len(ret) == 3:
-      return ret[0], ret[1], ret[2]
+      return ret[0], ret[1], ret[2], idx if self.file else ret[0], ret[1], ret[2]
 
     return ret
 

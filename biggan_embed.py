@@ -23,10 +23,20 @@ from BigGANdeep2 import Generator as G2
 from dataset import Cats
 from inpaint_tools import read_file_list
 
+class Params(object):
+    self.niters=5000
+    self.batch_size=16
+    self.z_size=128
+    self.lr=1e-3
+    self.device='cuda'
+    self.biggan2=True
+
 
 class Trainer(object):
-    def __init__(self, dataset, params):
+    def __init__(self, dataset, config):
         ### Misc ###
+        params = Params()
+        self.config = config
         self.device = params.device
 
         ### Make Dirs ###
@@ -56,13 +66,25 @@ class Trainer(object):
 
         self.scaler = GradScaler()
 
+
+        input_data_dir = settings["dirs"]["input_data_dir"]
+        output_data_dir = settings["dirs"]["output_data_dir"]
+        data_set = settings["data_set"]
+
+        inpainted_result_dir = os.path.join(output_data_dir, f"inpainted_{data_set}")
+        pathlib.Path(inpainted_result_dir).mkdir(parents=True, exist_ok=True)
+
+        self.inpainted_result_dir = os.path.join(output_data_dir, f"inpainted_{data_set}")
+
         ### Make Data Generator ###
         self.generator_train = DataLoader(dataset, batch_size=self.p.batch_size, shuffle=True, num_workers=4, drop_last=True)
 
-    def log_interpolation(self, ims):
-        torchvision.utils.save_image(
-            vutils.make_grid(fake, padding=2, normalize=True)
-            , os.path.join(self.images_dir, f'{step}.png'))
+    def log(self, ims, names):
+        for i, idx in enumerate(names):
+            im = ims[i]
+            out_image_name = os.path.join(self.inpainted_result_dir, f"{idx}.png")
+            io.imsave(out_image_name, im)
+    
 
     def load_gen(self):
         checkpoint = os.path.join(self.models_dir, 'checkpoint.pt')
@@ -76,6 +98,8 @@ class Trainer(object):
         z = torch.nn.Parameter(z, requires_grad=True)
         opt_ims = torch.optim.SGD([z], lr=self.p.lr, momentum=0.5)
 
+        mask = (mask -1)*-1
+
         for i in range(self.p.niter):
             with autocast():
                 if self.p.biggan2:
@@ -84,13 +108,17 @@ class Trainer(object):
                     fake = self.netG(z)
 
                 if self.p.full:
-                    loss = 1- ssim(fake*mask+1, ims+1, data_range=2)
+                    fake[torch.where(mask == 1)] = 0.0
+                    loss = 1- ssim((fake+1, ims+1, data_range=2))
                 else:
-                    loss = 1- ssim(fake*mask+ims+1, ims+1, data_range=2)
+                    fake[torch.where(mask == 0)] = 0
+                    loss = 1- ssim(fake+ims+1, ims+1, data_range=2)
 
             self.scalerG.scale(loss).backward()
             self.scalerG.step(opt_ims)
             self.scalerG.update()
+
+        self.log(fake, names)
 
 
 
@@ -106,25 +134,14 @@ class Trainer(object):
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    ## MISC & Hyper
-    parser.add_argument('--niters', type=int, default=5000, help='Number of training iterations')
-    parser.add_argument('--batch_size', type=int, default=256, help='Batch size')
-    parser.add_argument('--z_size', type=int, default=128, help='Latent space dimension')
-    parser.add_argument('--lr', type=float, default=5e-5, help='Learning rate G')
-    parser.add_argument('--log_dir', type=str, default='log', help='Save Location')
-    parser.add_argument('--device', type=str, default='cuda', help='Torch Device Choice')
-    parser.add_argument('--load_params', type=bool, default=False, help='Load Parameters form pickle in log dir')
-    parser.add_argument('--biggan2', type=bool, default=False)
-    parser.add_argument('--data', type=str, default='validation_200')
-    args = parser.parse_args()
+    args = argparse.ArgumentParser(description='InpaintImages')
+    config = InPaintConfig(args)
 
-
-    file_list = os.path.join("./MissingDataOpenData/", "data_splits", f"{args.data}.txt")
+    file_list = os.path.join("./MissingDataOpenData/", "data_splits", f"{args.data_set}.txt")
     file_ids = read_file_list(file_list)
-    dataset_train = Cats(path="./MissingDataOpenData/", files_orig=file_ids)
+    dataset_train = Cats(path="./MissingDataOpenData/", files_orig=file_ids, file=True)
 
-    trainer = Trainer(dataset_train, params=args)
+    trainer = Trainer(dataset_train, params=config)
     trainer.train()
 
 if __name__ == '__main__':
