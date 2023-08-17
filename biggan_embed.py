@@ -34,7 +34,7 @@ class Params(object):
         self.lr=2e-3
         self.device='cuda'
         self.biggan2=True
-        self.full=True
+        self.full=False
         self.models_dir='./big2/models/'
 
 
