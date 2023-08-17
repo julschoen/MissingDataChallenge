@@ -101,10 +101,10 @@ class Trainer(object):
                     fake = self.netG(z)
 
                 if self.p.full:
-                    fake[torch.where(mask == 1)] = 0.0
+                    fake = fake * ((mask-1)*-1)
                     loss = 1- ssim(fake+1, ims+1, data_range=2)
                 else:
-                    fake[torch.where(mask == 0)] = 0
+                    fake = fake * mask
                     loss = 1- ssim(fake+ims+1, ims+1, data_range=2)
 
             if i%100 == 0:
