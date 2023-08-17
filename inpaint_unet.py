@@ -15,7 +15,7 @@ def inpaint_one_image(model, in_image, mask):
     in_image = (in_image*2)-1
     mask = mask.astype(np.float32)
     in_image = torch.from_numpy(in_image).float().cuda().permute(2,0,1)
-    mask = torch.from_numpy(mask).float().cuda().unsqueeze(1)
+    mask = torch.from_numpy(mask).float().cuda().unsqueeze(0)
     in_image = torch.concat((in_image, mask), dim=1)
     with torch.no_grad():
         rec = model(in_image.unsqueeze(0)).squeeze()
