@@ -59,8 +59,8 @@ class Trainer(object):
         self.generator_train = DataLoader(dataset_train, batch_size=self.p.batch_size, shuffle=True, num_workers=4, drop_last=True)
         self.generator_val = DataLoader(dataset_val, batch_size=self.p.batch_size, shuffle=True, num_workers=4, drop_last=False)
 
-        #self.inpaint_loss = InpaintingLoss(device=self.p.device)
-        self.coefs = {'valid': 1.0, 'hole': 6.0, 'tv': 0.1, 'prc': 0.05, 'style': 120.0}
+        self.inpaint_loss = InpaintingLoss(device=self.p.device)
+        self.coefs = {'valid': 1.0, 'hole': 1.0, 'tv': 0.1, 'prc': 0.05, 'style': 1.0}
 
         ### Prep Training
         self.losses = []
@@ -160,10 +160,10 @@ class Trainer(object):
             mse_loss = F.mse_loss(rec, im)
             ssim_loss = 1 - ssim(rec+1, im+1, data_range=2)
 
-            #losses = self.inpaint_loss(masked[:,:3,:,:], masked[:,3,:,:].unsqueeze(1), rec, im)
+            losses = self.inpaint_loss(masked[:,:3,:,:], masked[:,3,:,:].unsqueeze(1), rec, im)
             loss = torch.tensor(0.0, device=self.p.device)
-            #for key in self.coefs.keys():
-            #    loss += self.coefs[key] * losses[key]
+            for key in self.coefs.keys():
+                loss += self.coefs[key] * losses[key]
 
 
             if self.p.only_ssim:
@@ -174,7 +174,7 @@ class Trainer(object):
             loss.backward()
             self.opt.step()
 
-            #if i%10==0: print(loss.detach().item())
+            if i%10==0: print(loss.detach().item())
             self.losses.append((mse_loss.detach().item(), ssim_loss.detach().item()))
             self.log(i, rec, im)
             if i%100 == 0 and i>0:
