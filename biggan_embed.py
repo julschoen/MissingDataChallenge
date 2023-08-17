@@ -130,7 +130,7 @@ def main():
 
     file_list = os.path.join("./MissingDataOpenData/", "data_splits", f"{config['data_set']}.txt")
     file_ids = read_file_list(file_list)
-    dataset_train = Cats(path="./MissingDataOpenData/", files_orig=file_ids, file=True)
+    dataset_train = Cats(path="./MissingDataOpenData/", files_masked=file_ids, files_mask=file_ids, file=True)
 
     trainer = Trainer(dataset_train, config)
     trainer.train()
