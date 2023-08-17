@@ -16,13 +16,12 @@ def inpaint_one_image(model, in_image, mask):
     mask = mask.astype(np.float32)
     in_image = torch.from_numpy(in_image).float().cuda().permute(2,0,1)
     mask = torch.from_numpy(mask).float().cuda().unsqueeze(0)
-
+    mask = mask/255
     in_image = torch.concat((in_image, mask), dim=0)
     with torch.no_grad():
         rec = model(in_image.unsqueeze(0)).squeeze()
 
     in_image = in_image[:3]
-    mask = mask/255
     rec[torch.where(mask == 0)] = in_image[torch.where(mask == 0)] 
     rec = rec.detach().cpu().permute(1,2,0).numpy()
     rec = (rec+1)/2
@@ -41,7 +40,7 @@ def inpaint_images(settings):
     model_dir = os.path.join(output_data_dir, "trained_model")
 
     model = UNet().cuda()
-    checkpoint = os.path.join("unet_l1_orig", "models", 'checkpoint.pt')
+    checkpoint = os.path.join("unet_l1", "models", 'checkpoint.pt')
     state_dict = torch.load(checkpoint)
     model.load_state_dict(state_dict['model'])
 
