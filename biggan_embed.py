@@ -140,11 +140,9 @@ class Trainer(object):
 
 def main():
     args = argparse.ArgumentParser(description='InpaintImages')
-    config = InPaintConfig(args)
+    config = InPaintConfig(args).settings
 
-
-    data_set = config["data_set"]
-    file_list = os.path.join("./MissingDataOpenData/", "data_splits", f"{data_set}.txt")
+    file_list = os.path.join("./MissingDataOpenData/", "data_splits", f"{config.data_set}.txt")
     file_ids = read_file_list(file_list)
     dataset_train = Cats(path="./MissingDataOpenData/", files_orig=file_ids, file=True)
 
