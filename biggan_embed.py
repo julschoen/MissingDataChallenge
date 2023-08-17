@@ -24,13 +24,14 @@ from dataset import Cats
 from inpaint_tools import read_file_list
 
 class Params(object):
-    self.niters=5000
-    self.batch_size=16
-    self.z_size=128
-    self.lr=1e-3
-    self.device='cuda'
-    self.biggan2=True
-    self.full=True
+    def __init__(self):
+        self.niters=5000
+        self.batch_size=16
+        self.z_size=128
+        self.lr=1e-3
+        self.device='cuda'
+        self.biggan2=True
+        self.full=True
 
 
 class Trainer(object):
