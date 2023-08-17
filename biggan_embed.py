@@ -110,9 +110,9 @@ class Trainer(object):
             if i%100 == 0:
                 print('[%d|%d] Loss: %.4f' % (i, self.p.niters, loss.detach().item()), flush=True)
 
-            self.scalerG.scale(loss).backward()
-            self.scalerG.step(opt_ims)
-            self.scalerG.update()
+            self.scaler.scale(loss).backward()
+            self.scaler.step(opt_ims)
+            self.scaler.update()
 
         self.log(fake, names)
 
