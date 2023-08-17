@@ -3,12 +3,12 @@
 		"name": "PurrfectPixel"
 	},
 	"training_parms": {
-		"method": "Flip Add",
+		"method": "BigCAT",
 		"dummy_value": 1000
 	},
 	"dirs": {
 		"input_data_dir": "./MissingDataOpenData/",
-		"output_data_dir": "./flip_out/"
+		"output_data_dir": "./biggan_out_full/"
 	},
 	"challenge_server": {
 		"address": "http://fungi.compute.dtu.dk:8080"
