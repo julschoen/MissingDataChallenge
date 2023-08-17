@@ -31,7 +31,7 @@ class Params(object):
         self.niters=5000
         self.batch_size=16
         self.z_size=128
-        self.lr=1e-1
+        self.lr=1e-3
         self.device='cuda'
         self.biggan2=True
         self.full=True
