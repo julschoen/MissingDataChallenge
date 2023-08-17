@@ -30,6 +30,7 @@ class Params(object):
     self.lr=1e-3
     self.device='cuda'
     self.biggan2=True
+    self.full=True
 
 
 class Trainer(object):
@@ -85,13 +86,11 @@ class Trainer(object):
             out_image_name = os.path.join(self.inpainted_result_dir, f"{idx}.png")
             io.imsave(out_image_name, im)
     
-
     def load_gen(self):
         checkpoint = os.path.join(self.models_dir, 'checkpoint.pt')
         
         state_dict = torch.load(checkpoint)
         self.netG.load_state_dict(state_dict['modelG_state_dict'])
-
 
     def G_batch(self, ims, mask, names):
         z = torch.randn((ims.shape[0], self.p.z_size), device=self.p.device)
