@@ -108,7 +108,7 @@ class Trainer(object):
                     loss = 1- ssim(fake+ims+1, ims+1, data_range=2)
 
             if i%100 == 0:
-                print('[%d|%d] Loss: %.4f' % (step, self.p.niters, loss.detach().item()), flush=True)
+                print('[%d|%d] Loss: %.4f' % (i, self.p.niters, loss.detach().item()), flush=True)
 
             self.scalerG.scale(loss).backward()
             self.scalerG.step(opt_ims)
