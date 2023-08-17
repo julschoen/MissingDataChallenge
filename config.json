@@ -3,12 +3,12 @@
 		"name": "PurrfectPixel"
 	},
 	"training_parms": {
-		"method": "Garfield v4 Masked",
+		"method": "Garfield v5 Masked",
 		"dummy_value": 1000
 	},
 	"dirs": {
 		"input_data_dir": "./MissingDataOpenData/",
-		"output_data_dir": "./unet_l1/"
+		"output_data_dir": "./unet_l1_orig/"
 	},
 	"challenge_server": {
 		"address": "http://fungi.compute.dtu.dk:8080"
